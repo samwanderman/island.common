@@ -19,6 +19,15 @@ public final class Tile {
 	private int z;
 	
 	/**
+	 * Set id
+	 * 
+	 * @param id
+	 */
+	public final void setId(final String id) {
+		this.id = id;
+	}
+	
+	/**
 	 * Get image path
 	 * 
 	 * @return
@@ -28,7 +37,16 @@ public final class Tile {
 	}
 	
 	/**
-	 * Get tile name
+	 * Set name
+	 * 
+	 * @param name
+	 */
+	public final void setName(final String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * Get name
 	 * 
 	 * @return
 	 */
@@ -37,12 +55,30 @@ public final class Tile {
 	}
 	
 	/**
-	 * Get tile weight
+	 * Set weight
+	 * 
+	 * @param weight
+	 */
+	public final void setWeight(final int weight) {
+		this.weight = weight;
+	}
+	
+	/**
+	 * Get weight
 	 * 
 	 * @return
 	 */
 	public final int getWeight() {
 		return weight;
+	}
+	
+	/**
+	 * Set z
+	 * 
+	 * @param z
+	 */
+	public final void setZ(final int z) {
+		this.z = z;
 	}
 	
 	/**
