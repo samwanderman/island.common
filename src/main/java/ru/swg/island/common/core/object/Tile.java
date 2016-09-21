@@ -28,6 +28,15 @@ public final class Tile {
 	}
 	
 	/**
+	 * Get id
+	 * 
+	 * @return
+	 */
+	public final String getId() {
+		return id;
+	}
+	
+	/**
 	 * Get image path
 	 * 
 	 * @return
