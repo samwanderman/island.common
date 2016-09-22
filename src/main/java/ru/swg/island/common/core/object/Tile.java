@@ -19,15 +19,6 @@ public final class Tile {
 	private int z;
 	
 	/**
-	 * Set id
-	 * 
-	 * @param id
-	 */
-	public final void setId(final String id) {
-		this.id = id;
-	}
-	
-	/**
 	 * Get id
 	 * 
 	 * @return
@@ -37,12 +28,30 @@ public final class Tile {
 	}
 	
 	/**
+	 * Set id
+	 * 
+	 * @param id
+	 */
+	public final void setId(final String id) {
+		this.id = id;
+	}
+	
+	/**
 	 * Get image path
 	 * 
 	 * @return
 	 */
 	public final String getImage() {
 		return image;
+	}
+	
+	/**
+	 * Set image path
+	 * 
+	 * @param image
+	 */
+	public final void setImage(final String image) {
+		this.image = image;
 	}
 	
 	/**
