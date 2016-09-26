@@ -128,4 +128,10 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface {
 
 	@Override
 	public final void mouseReleased(final MouseEvent event) { }
+	
+	@Override
+	public final void mouseMoved(final MouseEvent event) {}
+
+	@Override
+	public final void mouseExited(final MouseEvent event) { }
 }
