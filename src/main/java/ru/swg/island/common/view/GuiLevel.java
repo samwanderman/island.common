@@ -4,6 +4,7 @@
 package ru.swg.island.common.view;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,8 +17,11 @@ import ru.swg.island.common.io.IO;
 import ru.swg.wheelframework.ai.Logic;
 import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.GuiEvent;
+import ru.swg.wheelframework.event.event.KeyEvent;
 import ru.swg.wheelframework.event.event.MouseEvent;
+import ru.swg.wheelframework.event.interfaces.KeyEventInterface;
 import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
+import ru.swg.wheelframework.event.listener.KeyEventListener;
 import ru.swg.wheelframework.event.listener.MouseEventListener;
 import ru.swg.wheelframework.view.DisplayObject;
 import ru.swg.wheelframework.view.Point2D;
@@ -25,15 +29,21 @@ import ru.swg.wheelframework.view.Point2D;
 /**
  * Gui level
  */
-public class GuiLevel extends DisplayObject implements MouseEventInterface {
+public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyEventInterface {
 	// level base info
 	private final Level level;
-	// gui representation for landscape tiles
+	
+	// tiles
 	private final List<GuiTile> landscapeTiles = new ArrayList<>();
-	// gui representation for object tiles
 	private final List<GuiObjectTile> objectTiles = new ArrayList<>();
-	// mouse event listener
+
+	// listeners
 	private final MouseEventListener mouseEventListener = new MouseEventListener(this);
+	private final KeyEventListener keyEventListener = new KeyEventListener(this); 
+	
+	// edit mode
+	private boolean editMode = false;
+	private boolean showCoords = false;
 	
 	/**
 	 * Constructor
@@ -43,21 +53,38 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface {
 	public GuiLevel(final Level level) 
 			throws IOException {
 		this.level = level;
+		showCoords = false;
 		
-		for (final TilePoint tilePoint: level.getLandscapeTiles()) {
-			final GuiTile tile = new GuiTile(IO.loadTile(tilePoint.getTile()), tilePoint.getPoint());
-			tile.setParent(this);
-			landscapeTiles.add(tile);
+		if (level.getLandscapeTiles() != null) {
+			for (final TilePoint tilePoint: level.getLandscapeTiles()) {
+				final GuiTile tile = new GuiTile(IO.loadTile(tilePoint.getTile()), tilePoint.getPoint());
+				tile.setParent(this);
+				landscapeTiles.add(tile);
+			}
+			Collections.sort(landscapeTiles, new GuiTileComparator());
 		}
-		Collections.sort(landscapeTiles, new GuiTileComparator());
 		
-		for (final TilePoint tilePoint: level.getObjectTiles()) {
-			final GuiObjectTile tile = new GuiObjectTile(IO.loadTile(tilePoint.getTile()), tilePoint.getPoint());
-			tile.setParent(this);
-			tile.setSelected(true);
-			objectTiles.add(tile);
+		if (level.getObjectTiles() != null) {
+			for (final TilePoint tilePoint: level.getObjectTiles()) {
+				final GuiObjectTile tile = new GuiObjectTile(IO.loadTile(tilePoint.getTile()), tilePoint.getPoint());
+				tile.setParent(this);
+				tile.setSelected(true);
+				objectTiles.add(tile);
+			}
+			Collections.sort(objectTiles, new GuiTileComparator());
 		}
-		Collections.sort(objectTiles, new GuiTileComparator());
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param level
+	 * @param editMode
+	 */
+	public GuiLevel(final Level level, final boolean editMode) 
+			throws IOException {
+		this(level);
+		this.editMode = editMode;
 	}
 
 	/**
@@ -75,17 +102,30 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface {
 			final GuiEvent event = new GuiEvent(tile, graphics);
 			Events.dispatch(event);
 		}
+		
+		if (showCoords) {
+			for (int i = 0; i <= level.getWidth(); i++) {
+				graphics.draw(new Line2D.Float(getAbsoluteX() + i * Const.TILE_WIDTH, getAbsoluteY(), getAbsoluteX() + i * Const.TILE_WIDTH, getAbsoluteY() + Const.TILE_HEIGHT * level.getHeight()));	
+			}
+			
+			for (int i = 0; i <= level.getHeight(); i++) {
+				graphics.draw(new Line2D.Float(getAbsoluteX(), getAbsoluteY() + i * Const.TILE_HEIGHT, getAbsoluteX() + Const.TILE_WIDTH * level.getWidth(), getAbsoluteY() + i * Const.TILE_HEIGHT));
+			}
+		}
 	}
 	
 	@Override
 	protected final void registerListeners() {
 		super.registerListeners();
 		Events.addListener(MouseEvent.class, mouseEventListener);
+		Events.addListener(KeyEvent.class, keyEventListener);
 	}
 	
 	@Override
 	protected final void unregisterListeners() {
 		super.unregisterListeners();
+		Events.removeListener(MouseEvent.class, mouseEventListener);
+		Events.removeListener(KeyEvent.class, keyEventListener);
 	}
 	
 	/**
@@ -112,6 +152,16 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface {
 	private final Point2D extractPointFromEvent(final MouseEvent event) {
 		return new Point2D((event.getX() - getAbsoluteX()) / Const.TILE_WIDTH, (event.getY() - getAbsoluteY()) / Const.TILE_HEIGHT);
 	}
+	
+	@Override
+	public final int getWidth() {
+		return level.getWidth() * Const.TILE_WIDTH;
+	}
+	
+	@Override
+	public final int getHeight() {
+		return level.getHeight() * Const.TILE_HEIGHT;
+	}
 
 	@Override
 	public final void mouseClick(final MouseEvent event) {
@@ -134,4 +184,17 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface {
 
 	@Override
 	public final void mouseExited(final MouseEvent event) { }
+
+	@Override
+	public final void keyTyped(final KeyEvent event) { }
+
+	@Override
+	public final void keyPressed(final KeyEvent event) { 
+		if (event.getCode() == 109) {
+			showCoords = !showCoords;
+		}
+	}
+
+	@Override
+	public final void keyReleased(final KeyEvent event) { }
 }
