@@ -6,7 +6,7 @@ package ru.swg.island.common.core.object;
 /**
  * Class for tiles
  */
-public final class Tile {
+public class Tile {
 	// Tile id
 	private String id;
 	// Short tile description

@@ -3,6 +3,7 @@
  */
 package ru.swg.island.common.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +12,6 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ru.swg.island.common.core.object.Level;
-import ru.swg.island.common.core.object.Tile;
 import ru.swg.island.common.core.object.TilePoint;
 import ru.swg.island.common.view.GuiLevel;
 import ru.swg.wheelframework.io.Resources;
@@ -21,6 +21,7 @@ import ru.swg.wheelframework.view.Point2D;
  * Level save/load
  */
 public class IO {
+	private static final String TILES_PATH = "./resources/tiles/";
 	/**
 	 * Load tile info
 	 * 
@@ -28,11 +29,35 @@ public class IO {
 	 * @return
 	 * @throws IOException
 	 */
-	public static final Tile loadTile(final String path) 
+	public static final <T> T loadTile(final String path, final Class<T> tileClass) 
 			throws IOException {
-		return Resources.loadObject("./tiles/" + path + ".json", Tile.class);
+		return Resources.loadObject("./tiles/" + path + ".json", tileClass);
 	}
 	
+	/**
+	 * Load all tiles for given type from standart folders
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public static final <T> List<T> loadTiles(final String path, final Class<T> tileClass) 
+			throws IOException {
+		final File file = new File(TILES_PATH + path);
+		
+		if (!file.isDirectory()) {
+			throw new IOException();	
+		}
+
+		final String[] files = file.list();
+		final List<T> tiles = new ArrayList<>();
+		for (final String f: files) {
+			final T tile = Resources.loadObject(new File(TILES_PATH + path + "/" + f), tileClass);
+			tiles.add(tile);
+		}
+		
+		return tiles;
+	}
+
 	/**
 	 * Load level info
 	 * 

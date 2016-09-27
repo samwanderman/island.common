@@ -12,6 +12,7 @@ import java.util.List;
 
 import ru.swg.island.common.core.Const;
 import ru.swg.island.common.core.object.Level;
+import ru.swg.island.common.core.object.Tile;
 import ru.swg.island.common.core.object.TilePoint;
 import ru.swg.island.common.io.IO;
 import ru.swg.wheelframework.ai.Logic;
@@ -57,7 +58,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		if (level.getLandscapeTiles() != null) {
 			for (final TilePoint tilePoint: level.getLandscapeTiles()) {
-				final GuiTile tile = new GuiTile(IO.loadTile(tilePoint.getTile()), tilePoint.getPoint());
+				final GuiTile tile = new GuiTile(IO.loadTile(tilePoint.getTile(), Tile.class), tilePoint.getPoint());
 				tile.setParent(this);
 				landscapeTiles.add(tile);
 			}
@@ -66,7 +67,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		if (level.getObjectTiles() != null) {
 			for (final TilePoint tilePoint: level.getObjectTiles()) {
-				final GuiObjectTile tile = new GuiObjectTile(IO.loadTile(tilePoint.getTile()), tilePoint.getPoint());
+				final GuiObjectTile tile = new GuiObjectTile(IO.loadTile(tilePoint.getTile(), Tile.class), tilePoint.getPoint());
 				tile.setParent(this);
 				tile.setSelected(true);
 				objectTiles.add(tile);
