@@ -15,4 +15,9 @@ public final class Const {
 	public static final int WINDOW_WIDTH = 400;
 	// window height
 	public static final int WINDOW_HEIGHT = 300;
+	
+	// tile types
+	public static final int LANDSCAPE_TILE = 1;
+	public static final int OBJECT_TILE = 2;
+	public static final int UNIT_TILE = 3;
 }
