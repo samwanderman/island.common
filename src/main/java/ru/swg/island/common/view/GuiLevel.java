@@ -4,6 +4,7 @@
 package ru.swg.island.common.view;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.Line2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ import java.util.Collections;
 import java.util.List;
 
 import ru.swg.island.common.core.Const;
+import ru.swg.island.common.core.object.LandscapeTile;
 import ru.swg.island.common.core.object.Level;
+import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.island.common.core.object.Tile;
 import ru.swg.island.common.core.object.TilePoint;
 import ru.swg.island.common.io.IO;
@@ -45,6 +48,9 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	// edit mode
 	private boolean editMode = false;
 	private boolean showCoords = false;
+	
+	private Image flowImage;
+	private int flowImageX, flowImageY;
 	
 	/**
 	 * Constructor
@@ -112,6 +118,10 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			for (int i = 0; i <= level.getHeight(); i++) {
 				graphics.draw(new Line2D.Float(getAbsoluteX(), getAbsoluteY() + i * Const.TILE_HEIGHT, getAbsoluteX() + Const.TILE_WIDTH * level.getWidth(), getAbsoluteY() + i * Const.TILE_HEIGHT));
 			}
+		}
+		
+		if (flowImage != null) {
+			graphics.drawImage(flowImage, flowImageX, flowImageY, null);
 		}
 	}
 	
@@ -181,7 +191,12 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	public final void mouseReleased(final MouseEvent event) { }
 	
 	@Override
-	public final void mouseMoved(final MouseEvent event) {}
+	public final void mouseMoved(final MouseEvent event) {
+		if (flowImage != null) {
+			flowImageX = event.getX();
+			flowImageY = event.getY();
+		}
+	}
 
 	@Override
 	public final void mouseExited(final MouseEvent event) { }
@@ -198,4 +213,26 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 
 	@Override
 	public final void keyReleased(final KeyEvent event) { }
+	
+	public final void addLandscapeTile(final LandscapeTile tile, final Point2D point) 
+			throws IOException {
+		landscapeTiles.add(new GuiTile(tile, point));
+	}
+	
+	public final void addObjectTile(final ObjectTile tile, final Point2D point) 
+			throws IOException {
+		objectTiles.add(new GuiObjectTile(tile, point));
+	}
+	
+	public final void addFlowImage(final Image image, final int x, final int y) {
+		flowImage = image;
+		flowImageX = x;
+		flowImageY = y;
+	}
+	
+	public final void removeFlowImage() {
+		flowImage = null;
+		flowImageX = 0;
+		flowImageY = 0;
+	}
 }
