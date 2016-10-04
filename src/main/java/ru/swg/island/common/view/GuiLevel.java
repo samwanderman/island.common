@@ -4,7 +4,7 @@
 package ru.swg.island.common.view;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import ru.swg.island.common.core.Const;
 import ru.swg.island.common.core.object.LandscapeTile;
 import ru.swg.island.common.core.object.Level;
 import ru.swg.island.common.core.object.ObjectTile;
-import ru.swg.island.common.core.object.Tile;
 import ru.swg.island.common.core.object.TilePoint;
 import ru.swg.island.common.io.IO;
 import ru.swg.wheelframework.ai.Logic;
@@ -38,7 +37,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	private final Level level;
 	
 	// tiles
-	private final List<GuiTile> landscapeTiles = new ArrayList<>();
+	private final List<GuiLandscapeTile> landscapeTiles = new ArrayList<>();
 	private final List<GuiObjectTile> objectTiles = new ArrayList<>();
 
 	// listeners
@@ -48,9 +47,8 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	// edit mode
 	private boolean editMode = false;
 	private boolean showCoords = false;
-	
-	private Image flowImage;
-	private int flowImageX, flowImageY;
+
+	private GuiTile intendedTile;
 	
 	/**
 	 * Constructor
@@ -64,7 +62,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		if (level.getLandscapeTiles() != null) {
 			for (final TilePoint tilePoint: level.getLandscapeTiles()) {
-				final GuiTile tile = new GuiTile(IO.loadTile(tilePoint.getTile(), Tile.class), tilePoint.getPoint());
+				final GuiLandscapeTile tile = new GuiLandscapeTile(IO.loadTile(tilePoint.getTile(), LandscapeTile.class), tilePoint.getPoint());
 				tile.setParent(this);
 				landscapeTiles.add(tile);
 			}
@@ -73,7 +71,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		if (level.getObjectTiles() != null) {
 			for (final TilePoint tilePoint: level.getObjectTiles()) {
-				final GuiObjectTile tile = new GuiObjectTile(IO.loadTile(tilePoint.getTile(), Tile.class), tilePoint.getPoint());
+				final GuiObjectTile tile = new GuiObjectTile(IO.loadTile(tilePoint.getTile(), ObjectTile.class), tilePoint.getPoint());
 				tile.setParent(this);
 				tile.setSelected(true);
 				objectTiles.add(tile);
@@ -100,12 +98,12 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	 */
 	@Override
 	public final void paint(final Graphics2D graphics) {
-		for (final GuiTile tile: landscapeTiles) {
+		for (final GuiLandscapeTile tile: landscapeTiles) {
 			final GuiEvent event = new GuiEvent(tile, graphics);
 			Events.dispatch(event);
 		}
 		
-		for (final GuiTile tile: objectTiles) {
+		for (final GuiObjectTile tile: objectTiles) {
 			final GuiEvent event = new GuiEvent(tile, graphics);
 			Events.dispatch(event);
 		}
@@ -120,8 +118,8 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			}
 		}
 		
-		if (flowImage != null) {
-			graphics.drawImage(flowImage, flowImageX, flowImageY, null);
+		if (intendedTile != null) {
+			graphics.drawImage(intendedTile.getImage(), intendedTile.getAbsoluteX(), intendedTile.getAbsoluteY(), null);
 		}
 	}
 	
@@ -175,13 +173,27 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	}
 
 	@Override
+	public Rectangle getBoundRect() {
+		return new Rectangle(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
+	}
+	
+	@Override
 	public final void mouseClick(final MouseEvent event) {
 		final Point2D point = extractPointFromEvent(event);
 		if ((point.getX() < 0) || (point.getX() >= level.getWidth()) || (point.getY() < 0) || (point.getY() >= level.getHeight())) {
 			return;
 		}
-		final GuiObjectTile tile = objectTiles.get(0);
-		tile.setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));
+		
+		if (editMode) {
+			if (intendedTile != null) {
+				try {
+					addTile(intendedTile, point);
+				} catch (final IOException err) { }
+			}
+		} else {
+			final GuiObjectTile tile = objectTiles.get(0);
+			tile.setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));
+		}
 	}
 
 	@Override
@@ -192,9 +204,9 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	
 	@Override
 	public final void mouseMoved(final MouseEvent event) {
-		if (flowImage != null) {
-			flowImageX = event.getX();
-			flowImageY = event.getY();
+		if (intendedTile != null) {
+			intendedTile.setX(event.getX() - getAbsoluteX() - intendedTile.getWidth() / 2);
+			intendedTile.setY(event.getY() - getAbsoluteY() - intendedTile.getHeight() / 2);
 		}
 	}
 
@@ -202,37 +214,63 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	public final void mouseExited(final MouseEvent event) { }
 
 	@Override
-	public final void keyTyped(final KeyEvent event) { }
-
-	@Override
-	public final void keyPressed(final KeyEvent event) { 
+	public final void keyTyped(final KeyEvent event) {
 		if (event.getCode() == 109) {
 			showCoords = !showCoords;
 		}
 	}
 
 	@Override
+	public final void keyPressed(final KeyEvent event) { }
+
+	@Override
 	public final void keyReleased(final KeyEvent event) { }
 	
-	public final void addLandscapeTile(final LandscapeTile tile, final Point2D point) 
+	/**
+	 * Add tile to board
+	 * 
+	 * @param tile
+	 * @param point
+	 * @throws IOException
+	 */
+	public final <T extends GuiTile> void addTile(final T tile, final Point2D point) 
 			throws IOException {
-		landscapeTiles.add(new GuiTile(tile, point));
+		if (tile instanceof GuiLandscapeTile) {
+			final GuiLandscapeTile guiLandscapeTile = new GuiLandscapeTile((LandscapeTile) tile.getTile(), point);
+			guiLandscapeTile.setParent(this);
+			
+			boolean isReplaced = false;
+			for (int i = 0; i < landscapeTiles.size(); i++) {
+				if (landscapeTiles.get(i).getPoint().equals(point)) {
+					landscapeTiles.set(i, guiLandscapeTile);
+					isReplaced = true;
+				}
+			}
+			
+			if (!isReplaced) {
+				landscapeTiles.add(guiLandscapeTile);
+			}
+		} else if (tile instanceof GuiObjectTile) {
+			final GuiObjectTile guiObjectTile = new GuiObjectTile((ObjectTile) tile.getTile(), point);
+			guiObjectTile.setParent(this);
+
+			boolean isReplaced = false;
+			for (int i = 0; i < objectTiles.size(); i++) {
+				if (objectTiles.get(i).getPoint().equals(point)) {
+					objectTiles.set(i, guiObjectTile);
+					isReplaced = true;
+				}
+			}
+			
+			if (!isReplaced) {
+				objectTiles.add(guiObjectTile);
+			}
+		}
+		
+		update();
 	}
 	
-	public final void addObjectTile(final ObjectTile tile, final Point2D point) 
-			throws IOException {
-		objectTiles.add(new GuiObjectTile(tile, point));
-	}
-	
-	public final void addFlowImage(final Image image, final int x, final int y) {
-		flowImage = image;
-		flowImageX = x;
-		flowImageY = y;
-	}
-	
-	public final void removeFlowImage() {
-		flowImage = null;
-		flowImageX = 0;
-		flowImageY = 0;
+	public final <T extends GuiTile> void setIntentTile(final T tile) {
+		intendedTile = tile;
 	}
 }

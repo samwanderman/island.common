@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import ru.swg.island.common.animation.SimpleChangePositionAnimation;
-import ru.swg.island.common.core.object.Tile;
+import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.SyncEvent;
@@ -26,6 +26,11 @@ public class GuiObjectTile extends GuiTile implements SyncEventInterface {
 	
 	// sync event listener
 	private final SyncEventListener syncEventListener = new SyncEventListener(this);
+	
+	public GuiObjectTile(final ObjectTile tile) 
+			throws IOException {
+		super(tile);
+	}
 	
 	/**
 	 * Set element selected
@@ -64,7 +69,7 @@ public class GuiObjectTile extends GuiTile implements SyncEventInterface {
 	 * @param tile
 	 * @param point
 	 */
-	public GuiObjectTile(final Tile tile, final Point2D point) 
+	public GuiObjectTile(final ObjectTile tile, final Point2D point) 
 			throws IOException {
 		super(tile, point);
 	}
