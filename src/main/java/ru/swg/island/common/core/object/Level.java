@@ -3,7 +3,10 @@
  */
 package ru.swg.island.common.core.object;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import ru.swg.wheelframework.view.Point2D;
 
 /**
  * Level
@@ -18,9 +21,9 @@ public final class Level {
 	// height in cells
 	private int height;
 	// landscape tiles list
-	private List<TilePoint> landscapeTiles;
+	private List<TilePoint> landscapeTiles = new ArrayList<>();
 	// object tiles
-	private List<TilePoint> objectTiles;
+	private List<TilePoint> objectTiles = new ArrayList<>();
 	
 	/**
 	 * Set id
@@ -127,8 +130,50 @@ public final class Level {
 	 * @param tiles
 	 */
 	public final void setLandscapeTiles(final List<TilePoint> tiles) {
-		landscapeTiles = tiles;
+		if (tiles != null) {
+			landscapeTiles = tiles;
+		} else {
+			landscapeTiles.clear();
+		}
 	}	
+	
+	/**
+	 * Add new landscape tile
+	 * 
+	 * @param tile
+	 */
+	public final void addLandscapeTile(final TilePoint tile) {
+		for (int i = 0; i < landscapeTiles.size(); i++) {
+			if (landscapeTiles.get(i).getPoint().equals(tile.getPoint())) {
+				landscapeTiles.set(i, tile);
+				return;
+			}
+		}
+		
+		landscapeTiles.add(tile);
+	}
+	
+	public final boolean removeLandscapeTile(final Point2D point) {
+		for (final TilePoint tile: landscapeTiles) {
+			if (tile.getPoint().equals(point)) {
+				final boolean res = landscapeTiles.remove(tile);
+				landscapeTiles.add(new TilePoint("empty", point));
+				return res;
+			}
+		}
+		
+		return false;
+	}
+	
+	public final boolean hasLandscapeTile(final Point2D point) {
+		for (final TilePoint tile: landscapeTiles) {
+			if (tile.getPoint().equals(point)) {
+				return true;
+			}
+		}		
+		
+		return false;
+	}
 	
 	/**
 	 * Get object tiles
@@ -145,6 +190,50 @@ public final class Level {
 	 * @param tiles
 	 */
 	public final void setObjectTiles(final List<TilePoint> tiles) {
-		objectTiles = tiles;
+		if (tiles != null) {
+			objectTiles = tiles;
+		} else {
+			objectTiles.clear();
+		}
+	}
+	
+	/**
+	 * Add object tile
+	 * 
+	 * @param tile
+	 */
+	public final void addObjectTile(final TilePoint tile) {
+		objectTiles.add(tile);
+	}
+	
+	public final boolean removeObjectTile(final Point2D point) {
+		for (final TilePoint tile: objectTiles) {
+			if (tile.getPoint().equals(point)) {
+				return objectTiles.remove(tile);
+			}
+		}
+		
+		return false;
+	}
+	
+	public final boolean hasObjectTile(final Point2D point) {
+		for (final TilePoint tile: objectTiles) {
+			if (tile.getPoint().equals(point)) {
+				return true;
+			}
+		}		
+		
+		return false;
+	}
+	
+	public final void build() {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				final Point2D point = new Point2D(i, j);
+				if (!hasLandscapeTile(point)) {
+					landscapeTiles.add(new TilePoint("empty", point));
+				}
+			}
+		}
 	}
 }

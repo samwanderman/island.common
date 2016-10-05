@@ -5,39 +5,22 @@ package ru.swg.island.common.view;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.io.IOException;
 
 import ru.swg.island.common.core.Const;
 import ru.swg.island.common.core.object.Tile;
 import ru.swg.wheelframework.view.Point2D;
 import ru.swg.wheelframework.view.ui.GuiImage;
 
-/**
- * Gui tile
- */
 public class GuiTile extends GuiImage {
 	private final Tile tile;
 	private Point2D point;
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param tile
-	 */
-	public GuiTile(final Tile tile) 
-			throws IOException {
+	public GuiTile(final Tile tile) {
 		super(tile.getImage());
 		this.tile = tile;
 	}
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param path
-	 * @throws IOException
-	 */
-	public GuiTile(final Tile tile, final Point2D point) 
-			throws IOException {
+	public GuiTile(final Tile tile, final Point2D point) {
 		this(tile);
 		this.point = point;
 		setX(point.getX() * Const.TILE_WIDTH);
@@ -55,29 +38,14 @@ public class GuiTile extends GuiImage {
 		}
 	}
 	
-	/**
-	 * Get tile
-	 * 
-	 * @return
-	 */
 	public final Tile getTile() {
 		return tile;
 	}
 
-	/**
-	 * Get point
-	 * 
-	 * @return
-	 */
 	public final Point2D getPoint() {
 		return point;
 	}
 	
-	/**
-	 * Set point
-	 * 
-	 * @param point
-	 */
 	public final void setPoint(final Point2D point) {
 		this.point = point;
 	}

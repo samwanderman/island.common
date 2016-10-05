@@ -10,8 +10,8 @@ import ru.swg.wheelframework.view.Point2D;
 /**
  * GuiTile comparator
  */
-public final class GuiTileComparator implements Comparator<GuiTile> {
-	public final int compare(final GuiTile o1, final GuiTile o2) {
+public final class TileComparator<T extends GuiTile> implements Comparator<T> {
+	public final int compare(final T o1, final T o2) {
 		final Point2D p1 = o1.getPoint(), p2 = o2.getPoint();
 
 		// Layer sorting
@@ -24,11 +24,11 @@ public final class GuiTileComparator implements Comparator<GuiTile> {
 		}
 
 		// If same layer - tile pos sorting
-		if ((p1.getX() >= p2.getX()) && (p1.getY() >= p2.getY())) {
+		if (((p1.getX() >= p2.getX()) && (p1.getY() > p2.getY())) || ((p1.getX() > p2.getX()) && (p1.getY() >= p2.getY()))) {
 			return 1;
 		}
 		
-		if ((p1.getX() <= p2.getX()) && (p1.getY() <= p2.getY())) {
+		if (((p1.getX() <= p2.getX()) && (p1.getY() < p2.getY())) || ((p1.getX() < p2.getX()) && (p1.getY() <= p2.getY()))) {
 			return -1;
 		}
 		
