@@ -3,7 +3,6 @@
  */
 package ru.swg.island.common.view;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -22,7 +21,6 @@ import ru.swg.wheelframework.view.Point2D;
  */
 public class GuiObjectTile extends GuiTile implements SyncEventInterface {
 	private SimpleChangePositionAnimation animChangePos = null;
-	private boolean selected = false;
 	
 	// sync event listener
 	private final SyncEventListener syncEventListener = new SyncEventListener(this);
@@ -30,15 +28,6 @@ public class GuiObjectTile extends GuiTile implements SyncEventInterface {
 	public GuiObjectTile(final ObjectTile tile) 
 			throws IOException {
 		super(tile);
-	}
-	
-	/**
-	 * Set element selected
-	 * 
-	 * @param selected
-	 */
-	protected final void setSelected(final boolean selected) {
-		this.selected = selected;
 	}
 
 	@Override
@@ -59,8 +48,6 @@ public class GuiObjectTile extends GuiTile implements SyncEventInterface {
 			animChangePos.run();
 		}
 		super.paint(graphics);
-		graphics.setColor(Color.GREEN);
-		graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
 	}
 	
 	/**

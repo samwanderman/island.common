@@ -6,4 +6,4 @@ package ru.swg.island.common.core.object;
 /**
  * Unit tile
  */
-public class UnitTile extends Tile { }
+public class UnitTile extends ObjectTile { }

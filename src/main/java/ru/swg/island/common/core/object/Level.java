@@ -24,6 +24,8 @@ public final class Level {
 	private List<TilePoint> landscapeTiles = new ArrayList<>();
 	// object tiles
 	private List<TilePoint> objectTiles = new ArrayList<>();
+	// units tiles
+	private List<TilePoint> unitTiles = new ArrayList<>();
 	
 	/**
 	 * Set id
@@ -142,7 +144,7 @@ public final class Level {
 	 * 
 	 * @param tile
 	 */
-	public final void addLandscapeTile(final TilePoint tile) {
+	public final void setLandscapeTile(final TilePoint tile) {
 		for (int i = 0; i < landscapeTiles.size(); i++) {
 			if (landscapeTiles.get(i).getPoint().equals(tile.getPoint())) {
 				landscapeTiles.set(i, tile);
@@ -202,7 +204,14 @@ public final class Level {
 	 * 
 	 * @param tile
 	 */
-	public final void addObjectTile(final TilePoint tile) {
+	public final void setObjectTile(final TilePoint tile) {
+		for (int i = 0; i < objectTiles.size(); i++) {
+			if (objectTiles.get(i).getPoint().equals(tile.getPoint())) {
+				objectTiles.set(i, tile);
+				return;
+			}
+		}
+		
 		objectTiles.add(tile);
 	}
 	
@@ -218,6 +227,49 @@ public final class Level {
 	
 	public final boolean hasObjectTile(final Point2D point) {
 		for (final TilePoint tile: objectTiles) {
+			if (tile.getPoint().equals(point)) {
+				return true;
+			}
+		}		
+		
+		return false;
+	}
+	
+	public final List<TilePoint> getUnitTiles() {
+		return unitTiles;
+	}
+	
+	public final void setUnitTiles(final List<TilePoint> tiles) {
+		if (tiles != null) {
+			unitTiles = tiles;
+		} else {
+			unitTiles = new ArrayList<>();
+		}
+	}
+	
+	public final void setUnitTile(final TilePoint tile) {
+		for (int i = 0; i < unitTiles.size(); i++) {
+			if (unitTiles.get(i).getPoint().equals(tile.getPoint())) {
+				unitTiles.set(i, tile);
+				return;
+			}
+		}
+		
+		unitTiles.add(tile);
+	}
+	
+	public final boolean removeUnitTile(final Point2D point) {
+		for (final TilePoint tile: unitTiles) {
+			if (tile.getPoint().equals(point)) {
+				return unitTiles.remove(tile);
+			}
+		}
+		
+		return false;
+	}
+	
+	protected final boolean hasUnitTile(final Point2D point) {
+		for (final TilePoint tile: unitTiles) {
 			if (tile.getPoint().equals(point)) {
 				return true;
 			}

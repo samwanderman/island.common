@@ -3,6 +3,7 @@
  */
 package ru.swg.island.common.view;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
@@ -14,6 +15,7 @@ import ru.swg.wheelframework.view.ui.GuiImage;
 public class GuiTile extends GuiImage {
 	private final Tile tile;
 	private Point2D point;
+	private boolean selected = false;
 	
 	public GuiTile(final Tile tile) {
 		super(tile.getImage());
@@ -36,6 +38,11 @@ public class GuiTile extends GuiImage {
 		if (img != null) {
 			graphics.drawImage(img, getAbsoluteX() - (img.getWidth(null) - Const.TILE_WIDTH) / 2, getAbsoluteY() - (img.getHeight(null) - Const.TILE_HEIGHT) / 2, null);
 		}
+		
+		if (selected) {
+			graphics.setColor(Color.GREEN);
+			graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
+		}
 	}
 	
 	public final Tile getTile() {
@@ -48,5 +55,9 @@ public class GuiTile extends GuiImage {
 	
 	public final void setPoint(final Point2D point) {
 		this.point = point;
+	}
+	
+	public final void setSelected(final boolean selected) {
+		this.selected = selected;
 	}
 }

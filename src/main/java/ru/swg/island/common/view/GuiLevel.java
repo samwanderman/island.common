@@ -3,11 +3,9 @@
  */
 package ru.swg.island.common.view;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +16,7 @@ import ru.swg.island.common.core.object.LandscapeTile;
 import ru.swg.island.common.core.object.Level;
 import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.island.common.core.object.TilePoint;
+import ru.swg.island.common.core.object.UnitTile;
 import ru.swg.island.common.io.IO;
 import ru.swg.wheelframework.ai.Logic;
 import ru.swg.wheelframework.event.Events;
@@ -52,7 +51,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	private boolean showCoords = false;
 
 	private GuiTile intendedTile;
-	private List<Point2D> selection = new ArrayList<>();
 	
 	public GuiLevel(final Level level) {
 		this.level = level;
@@ -90,14 +88,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			
 			for (int i = 0; i <= level.getHeight(); i++) {
 				graphics.draw(new Line2D.Float(getAbsoluteX(), getAbsoluteY() + i * Const.TILE_HEIGHT, getAbsoluteX() + Const.TILE_WIDTH * level.getWidth(), getAbsoluteY() + i * Const.TILE_HEIGHT));
-			}
-		}
-		
-		if (selection.size() != 0) {
-			graphics.setColor(Color.GREEN);
-			
-			for (final Point2D point: selection) {
-				graphics.draw(new Rectangle2D.Float(getAbsoluteX() + point.getX() * Const.TILE_WIDTH, getAbsoluteY() + point.getY() * Const.TILE_HEIGHT, Const.TILE_WIDTH, Const.TILE_HEIGHT));
 			}
 		}
 		
@@ -174,10 +164,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 				} catch (final IOException err) { }
 				return;
 			}
-			
-			if ((event.getNum() == 1) && hasTileAtPoint(point)) {
-				selection.add(point);
-			}
 		} else {
 			final GuiObjectTile tile = objectTiles.get(0);
 			tile.setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));
@@ -204,16 +190,12 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	@Override
 	public final void keyTyped(final KeyEvent event) {
 		switch (event.getCode()) {
-		case 27:
-			selection.clear();
+		case 27: // ESC
 			break;
-		case 109:
+		case 109: // M
 			showCoords = !showCoords;
 			break;
-		case 127:
-			removeTilesAtPoints(selection);
-			selection.clear();
-			update();
+		case 127: // DELETE
 			break;
 		default:
 		}
@@ -235,37 +217,11 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	public final <T extends GuiTile> void addTile(final T tile, final Point2D point) 
 			throws IOException {
 		if (tile instanceof GuiLandscapeTile) {
-			final GuiLandscapeTile guiLandscapeTile = new GuiLandscapeTile((LandscapeTile) tile.getTile(), point);
-			guiLandscapeTile.setParent(this);
-			
-			boolean isReplaced = false;
-			for (int i = 0; i < landscapeTiles.size(); i++) {
-				if (landscapeTiles.get(i).getPoint().equals(point)) {
-					landscapeTiles.set(i, guiLandscapeTile);
-					level.addLandscapeTile(new TilePoint(guiLandscapeTile.getTile().getId(), point));
-					isReplaced = true;
-				}
-			}
-			
-			if (!isReplaced) {
-				landscapeTiles.add(guiLandscapeTile);
-			}
+			level.setLandscapeTile(new TilePoint(tile.getTile().getId(), point));
+		} else if (tile instanceof GuiUnitTile) {
+			level.setUnitTile(new TilePoint(tile.getTile().getId(), point));
 		} else if (tile instanceof GuiObjectTile) {
-			final GuiObjectTile guiObjectTile = new GuiObjectTile((ObjectTile) tile.getTile(), point);
-			guiObjectTile.setParent(this);
-
-			boolean isReplaced = false;
-			for (int i = 0; i < objectTiles.size(); i++) {
-				if (objectTiles.get(i).getPoint().equals(point)) {
-					objectTiles.set(i, guiObjectTile);
-					level.addObjectTile(new TilePoint(guiObjectTile.getTile().getId(), point));
-					isReplaced = true;
-				}
-			}
-			
-			if (!isReplaced) {
-				objectTiles.add(guiObjectTile);
-			}
+			level.setObjectTile(new TilePoint(tile.getTile().getId(), point));
 		}
 		
 		update();
@@ -292,7 +248,19 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 				tile.setParent(this);
 				objectTiles.add(tile);
 			} catch (final IOException e) {
+				Log.error(e.getLocalizedMessage());
 				Log.error("Can't load object tile " + tilePoint.getTile());
+			}
+		}
+		
+		for (final TilePoint tilePoint: level.getUnitTiles()) {
+			try {
+				final GuiUnitTile tile = new GuiUnitTile(IO.loadTile("./units/" + tilePoint.getTile(), UnitTile.class), tilePoint.getPoint());
+				tile.setParent(this);
+				objectTiles.add(tile);
+			} catch (final IOException e) {
+				Log.error(e.getLocalizedMessage());
+				Log.error("Can't load unit tile " + tilePoint.getTile());
 			}
 		}
 		Collections.sort(objectTiles, new TileComparator<GuiObjectTile>());
@@ -346,6 +314,12 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			removeObjectTile(point);
 			level.removeLandscapeTile(point);
 			removeLandscapeTile(point);
+			level.removeUnitTile(point);
+			removeObjectTile(point);
 		}
+	}
+	
+	public final Level getLevel() {
+		return level;
 	}
 }
