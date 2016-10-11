@@ -62,6 +62,8 @@ public class IO {
 		final JsonNode json = Resources.loadJSON(path, true);		
 		final Level level = new Level();		
 		level.setId(json.get("id").asText());
+		level.setName(json.get("name").asText());
+		level.setDescription(json.get("description").asText());
 		level.setWidth(json.get("width").asInt(0));
 		level.setHeight(json.get("height").asInt(0));
 		

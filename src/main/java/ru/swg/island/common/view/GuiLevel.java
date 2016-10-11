@@ -67,7 +67,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 
 	/**
 	 * Custom tile painting
-	 * FIXME
 	 */
 	@Override
 	public final void paint(final Graphics2D graphics) {
