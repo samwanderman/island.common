@@ -160,9 +160,12 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			if (intendedTile != null) {
 				try {
 					addTile(intendedTile, point);
+					setIntentTile(null);
 				} catch (final IOException err) { }
 				return;
 			}
+			
+			intendedTile = getTileAtPoint(point);
 		} else {
 			final GuiObjectTile tile = objectTiles.get(0);
 			tile.setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));
@@ -195,6 +198,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			showCoords = !showCoords;
 			break;
 		case 127: // DELETE
+			setIntentTile(null);
 			break;
 		default:
 		}
@@ -270,55 +274,36 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	public final <T extends GuiTile> void setIntentTile(final T tile) {
 		intendedTile = tile;
 	}
-	
-	private final boolean hasTileAtPoint(final Point2D point) {
-		for (final GuiLandscapeTile tile: landscapeTiles) {
-			if (tile.getPoint().equals(point)) {
-				return true;
-			}
-		}
 		
-		for (final GuiObjectTile tile: objectTiles) {
-			if (tile.getPoint().equals(point)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private final boolean removeLandscapeTile(final Point2D point) {
-		for (final GuiLandscapeTile tile: landscapeTiles) {
-			if (tile.getPoint().equals(point)) {
-				return landscapeTiles.remove(tile);
-			}
-		}
-		
-		return false;
-	}
-	
-	private final boolean removeObjectTile(final Point2D point) {
-		for (final GuiObjectTile tile: objectTiles) {
-			if (tile.getPoint().equals(point)) {
-				return objectTiles.remove(tile);
-			}
-		}	
-		
-		return false;
-	}
-	
-	private final void removeTilesAtPoints(final List<Point2D> points) {
-		for (final Point2D point: points) {
-			level.removeObjectTile(point);
-			removeObjectTile(point);
-			level.removeLandscapeTile(point);
-			removeLandscapeTile(point);
-			level.removeUnitTile(point);
-			removeObjectTile(point);
-		}
-	}
-	
 	public final Level getLevel() {
 		return level;
+	}
+	
+	/**
+	 * Get tile at point
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private final GuiTile getTileAtPoint(final Point2D point) {
+		GuiTile tile = null;
+		
+		for (final GuiObjectTile objectTile: objectTiles) {
+			if (objectTile.getPoint().equals(point)) {
+				objectTile.setSelected(true);
+				objectTiles.remove(objectTile);
+				return objectTile;
+			}
+		}
+		
+		for (final GuiLandscapeTile landscapeTile: landscapeTiles) {
+			if (landscapeTile.getPoint().equals(point)) {
+				landscapeTile.setSelected(true);
+				landscapeTiles.remove(landscapeTile);
+				return landscapeTile;
+			}			
+		}
+		
+		return tile;
 	}
 }
