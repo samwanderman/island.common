@@ -52,6 +52,8 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 
 	private GuiTile intendedTile;
 	
+	private GuiTile selectedTile;
+	
 	public GuiLevel(final Level level) {
 		this.level = level;
 		showCoords = false;
@@ -121,6 +123,10 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			map[tile.getPoint().getX()][tile.getPoint().getY()] = (tile.getTile().getWeight() >= 0 ? 0 : -1);
 		}
 		
+		for (final GuiTile tile: objectTiles) {
+			map[tile.getPoint().getX()][tile.getPoint().getY()] = -1;
+		}
+		
 		return map;
 	}
 	
@@ -165,10 +171,22 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 				return;
 			}
 			
-			intendedTile = getTileAtPoint(point);
+			intendedTile = unbindTileAtPoint(point);
 		} else {
-			final GuiObjectTile tile = objectTiles.get(0);
-			tile.setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));
+			switch (event.getNum()) {
+			case 1:
+				if (selectedTile != null) {
+					selectedTile.setSelected(false);
+				}
+				selectedTile = getObjectAtPoint(point);
+				break;
+			case 3:
+				if ((selectedTile != null) && (selectedTile instanceof GuiUnitTile)) {
+					((GuiUnitTile) selectedTile).setPath(Logic.findPath(getPathMap(), selectedTile.getPoint(), point));
+				}
+				break;
+			default:
+			}
 		}
 	}
 
@@ -193,6 +211,10 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	public final void keyTyped(final KeyEvent event) {
 		switch (event.getCode()) {
 		case 27: // ESC
+			if (selectedTile != null) {
+				selectedTile.setSelected(false);
+				selectedTile = null;
+			}
 			break;
 		case 109: // M
 			showCoords = !showCoords;
@@ -280,12 +302,12 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	}
 	
 	/**
-	 * Get tile at point
+	 * Unbind tile at point
 	 * 
 	 * @param point
 	 * @return
 	 */
-	private final GuiTile getTileAtPoint(final Point2D point) {
+	private final GuiTile unbindTileAtPoint(final Point2D point) {
 		GuiTile tile = null;
 		
 		for (final GuiObjectTile objectTile: objectTiles) {
@@ -305,5 +327,25 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		}
 		
 		return tile;
+	}
+
+	/**
+	 * Get tile at point
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private final GuiTile getObjectAtPoint(final Point2D point) {
+		GuiTile tile = null;
+		
+		for (final GuiObjectTile objectTile: objectTiles) {
+			if (objectTile.getPoint().equals(point)) {
+				objectTile.setSelected(true);
+				return objectTile;
+			}
+		}
+		
+		return tile;
+		
 	}
 }
