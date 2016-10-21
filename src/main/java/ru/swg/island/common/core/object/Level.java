@@ -6,7 +6,7 @@ package ru.swg.island.common.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Level

@@ -4,7 +4,7 @@
 package ru.swg.island.common.view;
 
 import ru.swg.island.common.core.object.LandscapeTile;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * LandscapeTile

@@ -14,7 +14,7 @@ import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.SyncEvent;
 import ru.swg.wheelframework.event.interfaces.SyncEventInterface;
 import ru.swg.wheelframework.event.listener.SyncEventListener;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Gui object tile

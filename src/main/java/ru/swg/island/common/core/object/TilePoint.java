@@ -3,7 +3,7 @@
  */
 package ru.swg.island.common.core.object;
 
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Tile with point

@@ -3,8 +3,8 @@
  */
 package ru.swg.island.common.view;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +29,8 @@ import ru.swg.wheelframework.event.listener.KeyEventListener;
 import ru.swg.wheelframework.event.listener.MouseEventListener;
 import ru.swg.wheelframework.log.Log;
 import ru.swg.wheelframework.view.DisplayObject;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
+import ru.swg.wheelframework.view.figure.Rectangle;
 
 /**
  * Gui level
@@ -51,8 +52,9 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	private boolean showCoords = false;
 
 	private GuiTile intendedTile;
+	private List<GuiTile> selectedTiles = new ArrayList<>();
 	
-	private GuiTile selectedTile;
+	private Rectangle selection;
 	
 	public GuiLevel(final Level level) {
 		this.level = level;
@@ -94,6 +96,11 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		if (intendedTile != null) {
 			graphics.drawImage(intendedTile.getImage(), intendedTile.getAbsoluteX(), intendedTile.getAbsoluteY(), null);
+		}
+		
+		if (selection != null) {
+			graphics.setColor(Color.GREEN);
+			graphics.draw(new java.awt.Rectangle(selection.getX(), selection.getY(), selection.getWidth(), selection.getHeight()));
 		}
 	}
 	
@@ -175,14 +182,16 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		} else {
 			switch (event.getNum()) {
 			case 1:
-				if (selectedTile != null) {
-					selectedTile.setSelected(false);
-				}
-				selectedTile = getObjectAtPoint(point);
+				clearSelectedTiles();
+				selectedTiles.add(getObjectAtPoint(point));
 				break;
 			case 3:
-				if ((selectedTile != null) && (selectedTile instanceof GuiUnitTile)) {
-					((GuiUnitTile) selectedTile).setPath(Logic.findPath(getPathMap(), selectedTile.getPoint(), point));
+				if (!selectedTiles.isEmpty()) {
+					for (final GuiTile tile: selectedTiles) {
+						if (tile instanceof GuiUnitTile) {
+							((GuiUnitTile) tile).setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));		
+						}
+					}
 				}
 				break;
 			default:
@@ -191,16 +200,30 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	}
 
 	@Override
-	public final void mousePressed(final MouseEvent event) { }
+	public final void mousePressed(final MouseEvent event) {
+		if (event.getNum() == 1) {
+			selection = new Rectangle(event.getX(), event.getY(), 0, 0);
+		}
+	}
 
 	@Override
-	public final void mouseReleased(final MouseEvent event) { }
+	public final void mouseReleased(final MouseEvent event) {
+		if (selection != null) {
+			clearSelectedTiles();
+			setSelectedTilesBySelection();
+			selection = null;	
+		}
+	}
 	
 	@Override
-	public final void mouseMoved(final MouseEvent event) {
+	public final void mouseMoved(final MouseEvent event) {		
 		if (intendedTile != null) {
 			intendedTile.setX(event.getX() - getAbsoluteX() - intendedTile.getWidth() / 2);
 			intendedTile.setY(event.getY() - getAbsoluteY() - intendedTile.getHeight() / 2);
+		}
+		
+		if (selection != null) {
+			selection = new Rectangle((int) selection.getX(), (int) selection.getY(), (int)(event.getX() - selection.getX()), (int)(event.getY() - selection.getY()));
 		}
 	}
 
@@ -211,10 +234,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	public final void keyTyped(final KeyEvent event) {
 		switch (event.getCode()) {
 		case 27: // ESC
-			if (selectedTile != null) {
-				selectedTile.setSelected(false);
-				selectedTile = null;
-			}
+			clearSelectedTiles();
 			break;
 		case 109: // M
 			showCoords = !showCoords;
@@ -346,6 +366,21 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		}
 		
 		return tile;
-		
+	}
+	
+	private final void clearSelectedTiles() {
+		for (final GuiTile tile: selectedTiles) {
+			tile.setSelected(false);
+		}
+		selectedTiles.clear();
+	}
+	
+	private final void setSelectedTilesBySelection() {
+		for (final GuiObjectTile tile: objectTiles) {
+			if ((tile instanceof GuiUnitTile) && selection.contains(tile.getBoundRect())) {
+				tile.setSelected(true);
+				selectedTiles.add(tile);
+			}
+		}
 	}
 }

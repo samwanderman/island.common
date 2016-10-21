@@ -5,7 +5,7 @@ package ru.swg.island.common.view;
 
 import java.util.Comparator;
 
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * GuiTile comparator

@@ -9,7 +9,7 @@ import java.awt.Image;
 
 import ru.swg.island.common.core.Const;
 import ru.swg.island.common.core.object.Tile;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 import ru.swg.wheelframework.view.ui.GuiImage;
 
 public class GuiTile extends GuiImage {

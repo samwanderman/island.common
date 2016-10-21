@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.island.common.core.object.UnitTile;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  *

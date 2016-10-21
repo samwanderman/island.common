@@ -11,7 +11,7 @@ import ru.swg.wheelframework.animation.Animation;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.GuiRepaintEvent;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Animation for simple change position - just coordinates

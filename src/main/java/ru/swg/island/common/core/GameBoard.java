@@ -16,7 +16,7 @@ import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
 import ru.swg.wheelframework.event.listener.KeyEventListener;
 import ru.swg.wheelframework.event.listener.MouseEventListener;
 import ru.swg.wheelframework.view.DisplayContainer;
-import ru.swg.wheelframework.view.Point2D;
+import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Simple GameBoard
