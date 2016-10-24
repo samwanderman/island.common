@@ -183,7 +183,10 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			switch (event.getNum()) {
 			case 1:
 				clearSelectedTiles();
-				selectedTiles.add(getObjectAtPoint(point));
+				final GuiTile _tile = getObjectAtPoint(point);
+				if (_tile != null) {
+					selectedTiles.add(_tile);
+				}
 				break;
 			case 3:
 				if (!selectedTiles.isEmpty()) {
@@ -356,8 +359,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	 * @return
 	 */
 	private final GuiTile getObjectAtPoint(final Point2D point) {
-		GuiTile tile = null;
-		
 		for (final GuiObjectTile objectTile: objectTiles) {
 			if (objectTile.getPoint().equals(point)) {
 				objectTile.setSelected(true);
@@ -365,7 +366,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			}
 		}
 		
-		return tile;
+		return null;
 	}
 	
 	private final void clearSelectedTiles() {
