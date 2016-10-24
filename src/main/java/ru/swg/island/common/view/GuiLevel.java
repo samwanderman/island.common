@@ -19,6 +19,7 @@ import ru.swg.island.common.core.object.TilePoint;
 import ru.swg.island.common.core.object.UnitTile;
 import ru.swg.island.common.io.IO;
 import ru.swg.wheelframework.ai.Logic;
+import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.GuiEvent;
 import ru.swg.wheelframework.event.event.KeyEvent;
@@ -127,11 +128,14 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		final int[][] map = new int[level.getWidth()][level.getHeight()];
 		
 		for (final GuiTile tile: landscapeTiles) {
-			map[tile.getPoint().getX()][tile.getPoint().getY()] = (tile.getTile().getWeight() >= 0 ? 0 : -1);
+			map[tile.getPoint().getX()][tile.getPoint().getY()] = (tile.getTile().getWeight() >= 0 ? 0 : Config.CELL_UNAVAILABLE);
 		}
 		
 		for (final GuiTile tile: objectTiles) {
-			map[tile.getPoint().getX()][tile.getPoint().getY()] = -1;
+			if (tile instanceof GuiUnitTile) {
+				map[tile.getPoint().getX()][tile.getPoint().getY()] = Config.CELL_TEMPORARILY_UNAVAILABLE;				
+			}
+			map[tile.getPoint().getX()][tile.getPoint().getY()] = Config.CELL_UNAVAILABLE;
 		}
 		
 		return map;
