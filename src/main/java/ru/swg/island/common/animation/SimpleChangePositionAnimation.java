@@ -3,46 +3,48 @@
  */
 package ru.swg.island.common.animation;
 
-import java.util.List;
+import java.util.LinkedList;
 
 import ru.swg.island.common.core.Const;
-import ru.swg.island.common.view.GuiTile;
+import ru.swg.island.common.view.GuiLevel;
+import ru.swg.island.common.view.GuiUnitTile;
 import ru.swg.wheelframework.animation.Animation;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.GuiRepaintEvent;
+import ru.swg.wheelframework.event.listener.ObjectListener;
 import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Animation for simple change position - just coordinates
  */
 public final class SimpleChangePositionAnimation implements Animation {
-	// Animation target
-	private final GuiTile target;
-	// animation running
-	private boolean running = false;
-	// Animation path
-	private final List<Point2D> path;
-	// Animation speed
+	private final GuiUnitTile target;
+	private final LinkedList<Point2D> path;
+	private final ObjectListener<Integer> onSuccess;
+	private final ObjectListener<Point2D> onError;
+	private Point2D prevPoint, nextPoint;
 	private final int speed;
-	// step speed
-	private final int stepSpeed;
-	// current step
 	private int step;
 	
-	/**
-	 * Constructor
-	 * 
-	 * @param target
-	 * @param path
-	 * @param speed
-	 */
-	public SimpleChangePositionAnimation(final GuiTile target, final List<Point2D> path, final int speed) {
+	private boolean running = false;
+	
+	public SimpleChangePositionAnimation(
+			final GuiUnitTile target, 
+			final LinkedList<Point2D> path, 
+			final int speed, 
+			final ObjectListener<Integer> onSuccess, 
+			final ObjectListener<Point2D> onError) {
 		this.target = target;
-		this.speed = speed;
 		this.path = path;
+		this.speed = speed / (path.size() - 1);
+		this.onSuccess = onSuccess;
+		this.onError = onError;
 		step = 0;
-		stepSpeed = speed / (path.size() - 1);
+		
+		if (!path.isEmpty()) {
+			prevPoint = path.pop();
+		}
 	}
 	
 	@Override
@@ -65,32 +67,65 @@ public final class SimpleChangePositionAnimation implements Animation {
 		start();
 		stop();
 	}
-
+	
 	@Override
 	public final void run() {
-		if (!running) {
+		// skip if not running
+		if (!running && (prevPoint != null)) {
 			return;
 		}
 		
-		if (step >= speed) {
-			stop();
-			final Point2D endPoint = path.get(path.size() - 1);
-			target.setPoint(endPoint);
-			target.setX(endPoint.getX() * Const.TILE_WIDTH);
-			target.setY(endPoint.getY() * Const.TILE_HEIGHT);
-			return;
+		// only in 1st time and when next step
+		if ((nextPoint == null) || (step >= speed)) {
+			// detect end of path
+			if (path.isEmpty()) {
+				target.setX(nextPoint.getX() * Const.TILE_WIDTH);
+				target.setY(nextPoint.getY() * Const.TILE_HEIGHT);
+				stop();
+				
+				// animation ended successfully
+				if (onSuccess != null) {
+					onSuccess.on(0);
+				}
+				return;
+			}
+			
+			// check cell status
+			switch (((GuiLevel) target.getParent()).getPointStatus(path.peekFirst())) {
+			// cell available
+			case Config.CELL_AVAILABLE:
+				if (nextPoint != null) {
+					prevPoint = nextPoint;
+				}
+				nextPoint = path.pop();
+				target.setPoint(nextPoint);
+				target.setX(prevPoint.getX() * Const.TILE_WIDTH);
+				target.setY(prevPoint.getY() * Const.TILE_HEIGHT);
+				step = 0;
+				
+				break;
+				
+			// cell busy
+			case Config.CELL_BUSY:
+				return;
+				
+			default:
+				stop();
+				if (onError != null) {
+					onError.on(path.peekFirst());
+				}
+				return;
+			}
 		}
 		
-		final int idx = step / stepSpeed, offset = step % stepSpeed;
-		final Point2D point = path.get(idx), nextPoint = path.get(idx + 1);
-		final float dx = (nextPoint.getX() - point.getX()) * (float) offset / stepSpeed;
-		final float dy = (nextPoint.getY() - point.getY()) * (float) offset / stepSpeed; 
-		
-		target.setPoint(point);
-		target.setX(point.getX() * Const.TILE_WIDTH + (int) (dx * Const.TILE_WIDTH));
-		target.setY(point.getY() * Const.TILE_HEIGHT + (int) (dy * Const.TILE_HEIGHT));
+		final float dx = (nextPoint.getX() - prevPoint.getX()) * Const.TILE_WIDTH * ((float) step / speed);
+		final float dy = (nextPoint.getY() - prevPoint.getY()) * Const.TILE_HEIGHT * ((float) step / speed);
+			
+		target.setX(prevPoint.getX() * Const.TILE_WIDTH + (int) dx);
+		target.setY(prevPoint.getY() * Const.TILE_HEIGHT + (int) dy);
+			
 		Events.dispatch(new GuiRepaintEvent());
-		
+			
 		step += Config.GLOBAL_TIMER_STEP;
 	}
 }

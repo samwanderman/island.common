@@ -3,16 +3,37 @@
  */
 package ru.swg.island.common.view;
 
+import java.awt.Graphics2D;
 import java.io.IOException;
+import java.util.LinkedList;
 
+import ru.swg.island.common.animation.SimpleChangePositionAnimation;
 import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.island.common.core.object.UnitTile;
+import ru.swg.wheelframework.ai.Logic;
+import ru.swg.wheelframework.core.Config;
+import ru.swg.wheelframework.event.listener.ObjectListener;
+import ru.swg.wheelframework.log.Log;
 import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
- *
+ * Gui Unit tile
  */
 public class GuiUnitTile extends GuiObjectTile {
+	private final GuiUnitTile self = this;
+	private SimpleChangePositionAnimation animChangePos = null;
+	
+	private final ObjectListener<Point2D> onAnimationError = new ObjectListener<Point2D>() {
+		@Override
+		public final void on(final Point2D finalPoint) {
+			Log.info("Try to find new end point");
+			final int[][] map = ((GuiLevel) getParent()).getPathMap();
+			final Point2D newEndPoint = Logic.getFindPathAlgorithm().findNewEndPoint(map, getPoint(), finalPoint);
+			final LinkedList<Point2D> newPath = Logic.getFindPathAlgorithm().find(map, getPoint(), newEndPoint);
+			animChangePos = new SimpleChangePositionAnimation(self, newPath, (newPath.size() - 1) * Config.GLOBAL_TIMER_STEP * 100, null, onAnimationError);
+		}
+	};
+	
 	public GuiUnitTile(final UnitTile tile) 
 			throws IOException {
 		super(tile);
@@ -21,5 +42,43 @@ public class GuiUnitTile extends GuiObjectTile {
 	public GuiUnitTile(final ObjectTile tile, final Point2D point) 
 			throws IOException {
 		super(tile, point);
+	}
+	
+	@Override
+	public void paint(final Graphics2D graphics) {
+		if (animChangePos != null) {
+			animChangePos.run();
+		}
+		super.paint(graphics);
+	}
+	
+	/**
+	 * Set animation path
+	 * 
+	 * @param path
+	 */
+	public final void setPath(final LinkedList<Point2D> path) {
+		if ((path == null) || (path.size() <= 1)) {
+			return;
+		}
+		
+		animChangePos = new SimpleChangePositionAnimation(this, path, (path.size() - 1) * Config.GLOBAL_TIMER_STEP * 100, null, onAnimationError);
+		animChangePos.start();
+	}
+	
+	/**
+	 * Check if change pos animation running
+	 * 
+	 * @return
+	 */
+	public final boolean isChangePositionAnimationRunning() {
+		return animChangePos != null ? animChangePos.isRunning() : false; 
+	}
+	
+	@Override
+	public final void sync() {
+		if (animChangePos != null) {
+			animChangePos.run();
+		}
 	}
 }

@@ -124,7 +124,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	 * 
 	 * @return
 	 */
-	private final int[][] getPathMap() {
+	public final int[][] getPathMap() {
 		final int[][] map = new int[level.getWidth()][level.getHeight()];
 		
 		for (final GuiTile tile: landscapeTiles) {
@@ -133,12 +133,39 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		for (final GuiTile tile: objectTiles) {
 			if (tile instanceof GuiUnitTile) {
-				map[tile.getPoint().getX()][tile.getPoint().getY()] = Config.CELL_TEMPORARILY_UNAVAILABLE;				
+				map[tile.getPoint().getX()][tile.getPoint().getY()] = ((GuiUnitTile) tile).isChangePositionAnimationRunning() ? Config.CELL_BUSY : Config.CELL_TEMPORARILY_UNAVAILABLE;				
 			}
 			map[tile.getPoint().getX()][tile.getPoint().getY()] = Config.CELL_UNAVAILABLE;
 		}
 		
 		return map;
+	}
+	
+	/**
+	 * Check point status
+	 * 
+	 * @param point
+	 * @return
+	 */
+	public final int getPointStatus(final Point2D point) {
+		for (final GuiTile tile: landscapeTiles) {
+			if (tile.getPoint().equals(point)) {
+				if (tile.getTile().getWeight() < 0) {
+					return Config.CELL_UNAVAILABLE;
+				}
+			}
+		}
+		
+		for (final GuiTile tile: objectTiles) {
+			if (tile.getPoint().equals(point)) {
+				if (tile instanceof GuiUnitTile) {
+					return ((GuiUnitTile) tile).isChangePositionAnimationRunning() ? Config.CELL_BUSY : Config.CELL_TEMPORARILY_UNAVAILABLE;				
+				}
+				return Config.CELL_UNAVAILABLE;
+			}
+		}
+		
+		return Config.CELL_AVAILABLE;
 	}
 	
 	/**
@@ -196,7 +223,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 				if (!selectedTiles.isEmpty()) {
 					for (final GuiTile tile: selectedTiles) {
 						if (tile instanceof GuiUnitTile) {
-							((GuiUnitTile) tile).setPath(Logic.findPath(getPathMap(), tile.getPoint(), point));		
+							((GuiUnitTile) tile).setPath(Logic.getFindPathAlgorithm().find(getPathMap(), tile.getPoint(), point));		
 						}
 					}
 				}
