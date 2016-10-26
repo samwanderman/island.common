@@ -3,7 +3,6 @@
  */
 package ru.swg.island.common.view;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,8 +24,9 @@ import ru.swg.wheelframework.event.event.MouseEvent;
 import ru.swg.wheelframework.event.interfaces.KeyEventInterface;
 import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
 import ru.swg.wheelframework.log.Log;
+import ru.swg.wheelframework.view.Color;
 import ru.swg.wheelframework.view.DisplayObject;
-import ru.swg.wheelframework.view.GraphicsAdapter;
+import ru.swg.wheelframework.view.Graphics;
 import ru.swg.wheelframework.view.figure.Point2D;
 import ru.swg.wheelframework.view.figure.Rectangle;
 
@@ -67,7 +67,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	 * Custom tile painting
 	 */
 	@Override
-	public final void paint(final GraphicsAdapter graphics) {
+	public final void paint(final Graphics graphics) {
 		for (final GuiLandscapeTile tile: landscapeTiles) {
 			final GuiEvent event = new GuiEvent(tile, graphics);
 			Events.dispatch(event);

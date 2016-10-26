@@ -12,7 +12,7 @@ import ru.swg.island.common.core.object.UnitTile;
 import ru.swg.wheelframework.ai.Logic;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.listener.ObjectListener;
-import ru.swg.wheelframework.view.GraphicsAdapter;
+import ru.swg.wheelframework.view.Graphics;
 import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
@@ -43,7 +43,7 @@ public class GuiUnitTile extends GuiObjectTile {
 	}
 	
 	@Override
-	public void paint(final GraphicsAdapter graphics) {
+	public void paint(final Graphics graphics) {
 		if (animChangePos != null) {
 			animChangePos.run();
 		}

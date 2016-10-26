@@ -3,12 +3,11 @@
  */
 package ru.swg.island.common.view;
 
-import java.awt.Color;
-import java.awt.Image;
-
 import ru.swg.island.common.core.Const;
 import ru.swg.island.common.core.object.Tile;
-import ru.swg.wheelframework.view.GraphicsAdapter;
+import ru.swg.wheelframework.view.Color;
+import ru.swg.wheelframework.view.Graphics;
+import ru.swg.wheelframework.view.Image;
 import ru.swg.wheelframework.view.figure.Point2D;
 import ru.swg.wheelframework.view.ui.GuiImage;
 
@@ -33,10 +32,10 @@ public class GuiTile extends GuiImage {
 	}
 	
 	@Override
-	public void paint(final GraphicsAdapter graphics) {
+	public void paint(final Graphics graphics) {
 		final Image img = getImage();
 		if (img != null) {
-			graphics.drawImage(img, getAbsoluteX() - (img.getWidth(null) - Const.TILE_WIDTH) / 2, getAbsoluteY() - (img.getHeight(null) - Const.TILE_HEIGHT) / 2);
+			graphics.drawImage(img, getAbsoluteX() - (img.getWidth() - Const.TILE_WIDTH) / 2, getAbsoluteY() - (img.getHeight() - Const.TILE_HEIGHT) / 2);
 		}
 		
 		if (selected) {
