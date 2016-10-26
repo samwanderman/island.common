@@ -3,7 +3,6 @@
  */
 package ru.swg.island.common.view;
 
-import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -13,7 +12,7 @@ import ru.swg.island.common.core.object.UnitTile;
 import ru.swg.wheelframework.ai.Logic;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.listener.ObjectListener;
-import ru.swg.wheelframework.log.Log;
+import ru.swg.wheelframework.view.GraphicsAdapter;
 import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
@@ -26,7 +25,6 @@ public class GuiUnitTile extends GuiObjectTile {
 	private final ObjectListener<Point2D> onAnimationError = new ObjectListener<Point2D>() {
 		@Override
 		public final void on(final Point2D finalPoint) {
-			Log.info("Try to find new end point");
 			final int[][] map = ((GuiLevel) getParent()).getPathMap();
 			final Point2D newEndPoint = Logic.getFindPathAlgorithm().findNewEndPoint(map, getPoint(), finalPoint);
 			final LinkedList<Point2D> newPath = Logic.getFindPathAlgorithm().find(map, getPoint(), newEndPoint);
@@ -45,7 +43,7 @@ public class GuiUnitTile extends GuiObjectTile {
 	}
 	
 	@Override
-	public void paint(final Graphics2D graphics) {
+	public void paint(final GraphicsAdapter graphics) {
 		if (animChangePos != null) {
 			animChangePos.run();
 		}

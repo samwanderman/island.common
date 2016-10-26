@@ -4,8 +4,6 @@
 package ru.swg.island.common.view;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +28,7 @@ import ru.swg.wheelframework.event.listener.KeyEventListener;
 import ru.swg.wheelframework.event.listener.MouseEventListener;
 import ru.swg.wheelframework.log.Log;
 import ru.swg.wheelframework.view.DisplayObject;
+import ru.swg.wheelframework.view.GraphicsAdapter;
 import ru.swg.wheelframework.view.figure.Point2D;
 import ru.swg.wheelframework.view.figure.Rectangle;
 
@@ -74,7 +73,7 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	 * Custom tile painting
 	 */
 	@Override
-	public final void paint(final Graphics2D graphics) {
+	public final void paint(final GraphicsAdapter graphics) {
 		for (final GuiLandscapeTile tile: landscapeTiles) {
 			final GuiEvent event = new GuiEvent(tile, graphics);
 			Events.dispatch(event);
@@ -87,21 +86,21 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 		
 		if (showCoords) {
 			for (int i = 0; i <= level.getWidth(); i++) {
-				graphics.draw(new Line2D.Float(getAbsoluteX() + i * Const.TILE_WIDTH, getAbsoluteY(), getAbsoluteX() + i * Const.TILE_WIDTH, getAbsoluteY() + Const.TILE_HEIGHT * level.getHeight()));	
+				graphics.drawLine(getAbsoluteX() + i * Const.TILE_WIDTH, getAbsoluteY(), getAbsoluteX() + i * Const.TILE_WIDTH, getAbsoluteY() + Const.TILE_HEIGHT * level.getHeight());	
 			}
 			
 			for (int i = 0; i <= level.getHeight(); i++) {
-				graphics.draw(new Line2D.Float(getAbsoluteX(), getAbsoluteY() + i * Const.TILE_HEIGHT, getAbsoluteX() + Const.TILE_WIDTH * level.getWidth(), getAbsoluteY() + i * Const.TILE_HEIGHT));
+				graphics.drawLine(getAbsoluteX(), getAbsoluteY() + i * Const.TILE_HEIGHT, getAbsoluteX() + Const.TILE_WIDTH * level.getWidth(), getAbsoluteY() + i * Const.TILE_HEIGHT);
 			}
 		}
 		
 		if (intendedTile != null) {
-			graphics.drawImage(intendedTile.getImage(), intendedTile.getAbsoluteX(), intendedTile.getAbsoluteY(), null);
+			graphics.drawImage(intendedTile.getImage(), intendedTile.getAbsoluteX(), intendedTile.getAbsoluteY());
 		}
 		
 		if (selection != null) {
 			graphics.setColor(Color.GREEN);
-			graphics.draw(new java.awt.Rectangle(selection.getX(), selection.getY(), selection.getWidth(), selection.getHeight()));
+			graphics.draw(selection);
 		}
 	}
 	
