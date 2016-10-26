@@ -24,8 +24,6 @@ import ru.swg.wheelframework.event.event.KeyEvent;
 import ru.swg.wheelframework.event.event.MouseEvent;
 import ru.swg.wheelframework.event.interfaces.KeyEventInterface;
 import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
-import ru.swg.wheelframework.event.listener.KeyEventListener;
-import ru.swg.wheelframework.event.listener.MouseEventListener;
 import ru.swg.wheelframework.log.Log;
 import ru.swg.wheelframework.view.DisplayObject;
 import ru.swg.wheelframework.view.GraphicsAdapter;
@@ -42,10 +40,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 	// tiles
 	private final List<GuiLandscapeTile> landscapeTiles = new ArrayList<>();
 	private final List<GuiObjectTile> objectTiles = new ArrayList<>();
-
-	// listeners
-	private final MouseEventListener mouseEventListener = new MouseEventListener(this);
-	private final KeyEventListener keyEventListener = new KeyEventListener(this); 
 	
 	// edit mode
 	private boolean editMode = false;
@@ -102,20 +96,6 @@ public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyE
 			graphics.setColor(Color.GREEN);
 			graphics.draw(selection);
 		}
-	}
-	
-	@Override
-	protected final void registerListeners() {
-		super.registerListeners();
-		Events.addListener(MouseEvent.class, mouseEventListener);
-		Events.addListener(KeyEvent.class, keyEventListener);
-	}
-	
-	@Override
-	protected final void unregisterListeners() {
-		super.unregisterListeners();
-		Events.removeListener(MouseEvent.class, mouseEventListener);
-		Events.removeListener(KeyEvent.class, keyEventListener);
 	}
 	
 	/**

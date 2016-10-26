@@ -8,40 +8,18 @@ import java.io.IOException;
 import ru.swg.island.common.core.object.Level;
 import ru.swg.island.common.view.GuiLevel;
 import ru.swg.island.common.view.GuiTile;
-import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.KeyEvent;
 import ru.swg.wheelframework.event.event.MouseEvent;
 import ru.swg.wheelframework.event.interfaces.KeyEventInterface;
 import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
-import ru.swg.wheelframework.event.listener.KeyEventListener;
-import ru.swg.wheelframework.event.listener.MouseEventListener;
 import ru.swg.wheelframework.view.DisplayContainer;
 import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Simple GameBoard
  */
-public class GameBoard extends DisplayContainer implements MouseEventInterface, KeyEventInterface {	
-	// listeners
-	private final MouseEventListener mouseEventListener = new MouseEventListener(this);
-	private final KeyEventListener keyEventListener = new KeyEventListener(this);
-	
+public class GameBoard extends DisplayContainer implements MouseEventInterface, KeyEventInterface {		
 	private GuiLevel guiLevel;
-
-	// listeners
-	@Override
-	protected final void registerListeners() {
-		super.registerListeners();
-		Events.addListener(MouseEvent.class, mouseEventListener);
-		Events.addListener(KeyEvent.class, keyEventListener);
-	};
-	
-	@Override
-	protected final void unregisterListeners() {
-		super.unregisterListeners();
-		Events.removeListener(MouseEvent.class, mouseEventListener);
-		Events.removeListener(KeyEvent.class, keyEventListener);
-	};
 
 	// Mouse funcs
 	@Override
