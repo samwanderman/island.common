@@ -18,7 +18,7 @@ import ru.swg.wheelframework.view.figure.Point2D;
 /**
  * Animation for simple change position - just coordinates
  */
-public final class SimpleChangePositionAnimation implements Animation {
+public final class SimpleChangePositionAnimation extends Animation {
 	private final GuiUnitTile target;
 	private final LinkedList<Point2D> path;
 	private final ObjectListener<Integer> onSuccess;
@@ -26,8 +26,6 @@ public final class SimpleChangePositionAnimation implements Animation {
 	private Point2D prevPoint, nextPoint;
 	private final int speed;
 	private int step;
-	
-	private boolean running = false;
 	
 	public SimpleChangePositionAnimation(
 			final GuiUnitTile target, 
@@ -48,30 +46,9 @@ public final class SimpleChangePositionAnimation implements Animation {
 	}
 	
 	@Override
-	public final boolean isRunning() {
-		return running;
-	}
-	
-	@Override
-	public final void start() {
-		running = true;
-	}
-
-	@Override
-	public final void stop() {
-		running = false;
-	}
-
-	@Override
-	public final void restart() {
-		start();
-		stop();
-	}
-	
-	@Override
 	public final void run() {
 		// skip if not running
-		if (!running && (prevPoint != null)) {
+		if (!isRunning() && (prevPoint != null)) {
 			return;
 		}
 		

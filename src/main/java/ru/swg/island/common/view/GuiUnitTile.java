@@ -10,6 +10,7 @@ import ru.swg.island.common.animation.SimpleChangePositionAnimation;
 import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.island.common.core.object.UnitTile;
 import ru.swg.wheelframework.ai.Logic;
+import ru.swg.wheelframework.animation.ClipAnimation;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.listener.ObjectListener;
 import ru.swg.wheelframework.view.Graphics;
@@ -21,6 +22,7 @@ import ru.swg.wheelframework.view.figure.Point2D;
 public class GuiUnitTile extends GuiObjectTile {
 	private final GuiUnitTile self = this;
 	private SimpleChangePositionAnimation animChangePos = null;
+	private ClipAnimation clipAnimation = new ClipAnimation(this, null, Config.GLOBAL_TIMER_STEP * 100);
 	
 	private final ObjectListener<Point2D> onAnimationError = new ObjectListener<Point2D>() {
 		@Override
@@ -43,10 +45,16 @@ public class GuiUnitTile extends GuiObjectTile {
 	}
 	
 	@Override
-	public void paint(final Graphics graphics) {
+	public final void paint(final Graphics graphics) {
 		if (animChangePos != null) {
 			animChangePos.run();
 		}
+
+		if (clipAnimation.isRunning()) {
+			clipAnimation.paint(graphics);
+			return;
+		}
+		
 		super.paint(graphics);
 	}
 	
