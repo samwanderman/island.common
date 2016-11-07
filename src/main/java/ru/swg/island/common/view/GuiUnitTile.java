@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import ru.swg.island.common.animation.SimpleChangePositionAnimation;
+import ru.swg.island.common.animation.SimpleClipAnimation;
 import ru.swg.island.common.core.object.ObjectTile;
 import ru.swg.island.common.core.object.UnitTile;
 import ru.swg.wheelframework.ai.Logic;
-import ru.swg.wheelframework.animation.ClipAnimation;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.listener.ObjectListener;
+import ru.swg.wheelframework.io.Resources;
 import ru.swg.wheelframework.view.Graphics;
 import ru.swg.wheelframework.view.figure.Point2D;
 
@@ -22,15 +23,31 @@ import ru.swg.wheelframework.view.figure.Point2D;
 public class GuiUnitTile extends GuiObjectTile {
 	private final GuiUnitTile self = this;
 	private SimpleChangePositionAnimation animChangePos = null;
-	private ClipAnimation clipAnimation = new ClipAnimation(this, null, Config.GLOBAL_TIMER_STEP * 100);
+	
+	private SimpleClipAnimation clipAnimation = new SimpleClipAnimation(this, Resources.loadAnimation("units/unit1/walk"), Config.GLOBAL_TIMER_STEP * 100, null, null);
+	
+	private final ObjectListener<Integer> onAnimationEnd = new ObjectListener<Integer>() {
+		@Override
+		public final void on(final Integer status) {
+			clipAnimation.reset();
+		}
+	};
+	
+	private final ObjectListener<Integer> onAnimationSuccess = new ObjectListener<Integer>() {
+		@Override
+		public final void on(final Integer object) {
+			clipAnimation.reset();
+		}
+	};
 	
 	private final ObjectListener<Point2D> onAnimationError = new ObjectListener<Point2D>() {
 		@Override
 		public final void on(final Point2D finalPoint) {
+			clipAnimation.reset();
 			final int[][] map = ((GuiLevel) getParent()).getPathMap();
 			final Point2D newEndPoint = Logic.getFindPathAlgorithm().findNewEndPoint(map, getPoint(), finalPoint);
 			final LinkedList<Point2D> newPath = Logic.getFindPathAlgorithm().find(map, getPoint(), newEndPoint);
-			animChangePos = new SimpleChangePositionAnimation(self, newPath, (newPath.size() - 1) * Config.GLOBAL_TIMER_STEP * 100, null, onAnimationError);
+			animChangePos = new SimpleChangePositionAnimation(self, newPath, (newPath.size() - 1) * Config.GLOBAL_TIMER_STEP * 100, onAnimationSuccess, onAnimationError);
 		}
 	};
 	
@@ -46,12 +63,9 @@ public class GuiUnitTile extends GuiObjectTile {
 	
 	@Override
 	public final void paint(final Graphics graphics) {
-		if (animChangePos != null) {
-			animChangePos.run();
-		}
-
 		if (clipAnimation.isRunning()) {
 			clipAnimation.paint(graphics);
+			paintSelection(graphics);
 			return;
 		}
 		
@@ -68,8 +82,10 @@ public class GuiUnitTile extends GuiObjectTile {
 			return;
 		}
 		
-		animChangePos = new SimpleChangePositionAnimation(this, path, (path.size() - 1) * Config.GLOBAL_TIMER_STEP * 100, null, onAnimationError);
+		animChangePos = new SimpleChangePositionAnimation(this, path, (path.size() - 1) * Config.GLOBAL_TIMER_STEP * 100, onAnimationEnd, onAnimationError);
 		animChangePos.start();
+		clipAnimation.reset();
+		clipAnimation.start();
 	}
 	
 	/**
@@ -85,6 +101,10 @@ public class GuiUnitTile extends GuiObjectTile {
 	public final void sync() {
 		if (animChangePos != null) {
 			animChangePos.run();
+		}
+		
+		if (clipAnimation != null) {
+			clipAnimation.run();
 		}
 	}
 }

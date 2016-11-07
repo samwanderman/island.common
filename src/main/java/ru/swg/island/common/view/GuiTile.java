@@ -38,10 +38,14 @@ public class GuiTile extends GuiImage {
 			graphics.drawImage(img, getAbsoluteX() - (img.getWidth() - Const.TILE_WIDTH) / 2, getAbsoluteY() - (img.getHeight() - Const.TILE_HEIGHT) / 2);
 		}
 		
+		paintSelection(graphics);
+	}
+	
+	protected final void paintSelection(final Graphics graphics) {
 		if (selected) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
-		}
+		}		
 	}
 	
 	public final Tile getTile() {

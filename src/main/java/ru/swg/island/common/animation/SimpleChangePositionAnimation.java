@@ -55,7 +55,7 @@ public final class SimpleChangePositionAnimation extends Animation {
 		// only in 1st time and when next step
 		if ((nextPoint == null) || (step >= speed)) {
 			// detect end of path
-			if (path.isEmpty()) {
+			if (path.isEmpty() && (nextPoint != null)) {
 				target.setX(nextPoint.getX() * Const.TILE_WIDTH);
 				target.setY(nextPoint.getY() * Const.TILE_HEIGHT);
 				stop();
