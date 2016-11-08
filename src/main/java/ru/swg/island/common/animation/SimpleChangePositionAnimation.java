@@ -3,6 +3,7 @@
  */
 package ru.swg.island.common.animation;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 import ru.swg.island.common.core.Const;
@@ -12,13 +13,17 @@ import ru.swg.wheelframework.animation.Animation;
 import ru.swg.wheelframework.core.Config;
 import ru.swg.wheelframework.event.Events;
 import ru.swg.wheelframework.event.event.GuiRepaintEvent;
+import ru.swg.wheelframework.event.interfaces.GuiEventInterface;
 import ru.swg.wheelframework.event.listener.ObjectListener;
+import ru.swg.wheelframework.io.Resources;
+import ru.swg.wheelframework.view.Graphics;
 import ru.swg.wheelframework.view.figure.Point2D;
 
 /**
  * Animation for simple change position - just coordinates
  */
-public final class SimpleChangePositionAnimation extends Animation {
+public final class SimpleChangePositionAnimation extends Animation implements GuiEventInterface {
+	private SimpleClipAnimation clipAnimation = null;
 	private final GuiUnitTile target;
 	private final LinkedList<Point2D> path;
 	private final ObjectListener<Integer> onSuccess;
@@ -33,6 +38,11 @@ public final class SimpleChangePositionAnimation extends Animation {
 			final int speed, 
 			final ObjectListener<Integer> onSuccess, 
 			final ObjectListener<Point2D> onError) {
+		
+		try {
+			clipAnimation = new SimpleClipAnimation(target, Resources.loadAnimation("units/unit1/walk"), Config.GLOBAL_TIMER_STEP * 100);
+		} catch (final IOException e) { }
+		
 		this.target = target;
 		this.path = path;
 		this.speed = speed / (path.size() - 1);
@@ -46,11 +56,31 @@ public final class SimpleChangePositionAnimation extends Animation {
 	}
 	
 	@Override
+	public final void start() {
+		super.start();
+		clipAnimation.start();
+	}
+	
+	@Override
+	public final void stop() {
+		super.stop();
+		clipAnimation.stop();
+	}
+	
+	@Override
+	public final void reset() {
+		stop();
+		step = 0;
+	}
+	
+	@Override
 	public final void run() {
 		// skip if not running
 		if (!isRunning() && (prevPoint != null)) {
 			return;
 		}
+		
+		clipAnimation.run();
 		
 		// only in 1st time and when next step
 		if ((nextPoint == null) || (step >= speed)) {
@@ -58,7 +88,7 @@ public final class SimpleChangePositionAnimation extends Animation {
 			if (path.isEmpty() && (nextPoint != null)) {
 				target.setX(nextPoint.getX() * Const.TILE_WIDTH);
 				target.setY(nextPoint.getY() * Const.TILE_HEIGHT);
-				stop();
+				reset();
 				
 				// animation ended successfully
 				if (onSuccess != null) {
@@ -87,7 +117,8 @@ public final class SimpleChangePositionAnimation extends Animation {
 				return;
 				
 			default:
-				stop();
+				reset();
+				
 				if (onError != null) {
 					onError.on(path.peekFirst());
 				}
@@ -104,5 +135,12 @@ public final class SimpleChangePositionAnimation extends Animation {
 		Events.dispatch(new GuiRepaintEvent());
 			
 		step += Config.GLOBAL_TIMER_STEP;
+	}
+
+	@Override
+	public final void paint(final Graphics graphics) {
+		if (isRunning() && (clipAnimation != null)) {
+			clipAnimation.paint(graphics);
+		}
 	}
 }

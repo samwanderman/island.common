@@ -10,6 +10,10 @@ import ru.swg.wheelframework.view.Graphics;
 import ru.swg.wheelframework.view.Image;
 
 public class SimpleClipAnimation extends ClipAnimation {
+	public SimpleClipAnimation(final DisplayObject target, final List<Image> images, final int speed) {
+		super(target, images, speed, null, null);
+	}
+
 	public SimpleClipAnimation(final DisplayObject target, final List<Image> images, final int speed, final ObjectListener<Boolean> successCallback, final ObjectListener<Object> errorCallback) {
 		super(target, images, speed, successCallback, errorCallback);
 	}
