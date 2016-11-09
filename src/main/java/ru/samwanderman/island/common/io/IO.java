@@ -1,7 +1,7 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.swg.island.common.io;
+package ru.samwanderman.island.common.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,10 +11,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import ru.swg.island.common.core.object.Level;
-import ru.swg.island.common.core.object.TilePoint;
-import ru.swg.wheelframework.io.Resources;
-import ru.swg.wheelframework.view.figure.Point2D;
+import ru.samwanderman.island.common.core.object.Level;
+import ru.samwanderman.island.common.core.object.TilePoint;
+import ru.samwanderman.rtwf.io.Resources;
+import ru.samwanderman.rtwf.view.figure.Point2D;
 
 /**
  * Level save/load

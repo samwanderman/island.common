@@ -1,12 +1,12 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.swg.island.common.core.object;
+package ru.samwanderman.island.common.core.object;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.swg.wheelframework.view.figure.Point2D;
+import ru.samwanderman.rtwf.view.figure.Point2D;
 
 /**
  * Level

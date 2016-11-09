@@ -1,13 +1,13 @@
-package ru.swg.island.common.animation;
+package ru.samwanderman.island.common.animation;
 
 import java.util.List;
 
-import ru.swg.island.common.core.Const;
-import ru.swg.wheelframework.animation.ClipAnimation;
-import ru.swg.wheelframework.event.listener.ObjectListener;
-import ru.swg.wheelframework.view.DisplayObject;
-import ru.swg.wheelframework.view.Graphics;
-import ru.swg.wheelframework.view.Image;
+import ru.samwanderman.island.common.core.Const;
+import ru.samwanderman.rtwf.animation.ClipAnimation;
+import ru.samwanderman.rtwf.event.listener.ObjectListener;
+import ru.samwanderman.rtwf.view.DisplayObject;
+import ru.samwanderman.rtwf.view.Graphics;
+import ru.samwanderman.rtwf.view.Image;
 
 public class SimpleClipAnimation extends ClipAnimation {
 	public SimpleClipAnimation(final DisplayObject target, final List<Image> images, final int speed) {

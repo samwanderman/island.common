@@ -1,19 +1,19 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.swg.island.common.view;
+package ru.samwanderman.island.common.view;
 
 import java.io.IOException;
 import java.util.LinkedList;
 
-import ru.swg.island.common.animation.SimpleChangePositionAnimation;
-import ru.swg.island.common.core.object.ObjectTile;
-import ru.swg.island.common.core.object.UnitTile;
-import ru.swg.wheelframework.ai.Logic;
-import ru.swg.wheelframework.core.Config;
-import ru.swg.wheelframework.event.listener.ObjectListener;
-import ru.swg.wheelframework.view.Graphics;
-import ru.swg.wheelframework.view.figure.Point2D;
+import ru.samwanderman.island.common.animation.SimpleChangePositionAnimation;
+import ru.samwanderman.island.common.core.object.ObjectTile;
+import ru.samwanderman.island.common.core.object.UnitTile;
+import ru.samwanderman.rtwf.ai.Logic;
+import ru.samwanderman.rtwf.core.Config;
+import ru.samwanderman.rtwf.event.listener.ObjectListener;
+import ru.samwanderman.rtwf.view.Graphics;
+import ru.samwanderman.rtwf.view.figure.Point2D;
 
 /**
  * Gui Unit tile

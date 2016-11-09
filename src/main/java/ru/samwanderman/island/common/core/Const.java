@@ -1,7 +1,7 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.swg.island.common.core;
+package ru.samwanderman.island.common.core;
 
 /**
  * Constants

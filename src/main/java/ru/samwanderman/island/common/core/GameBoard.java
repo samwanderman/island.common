@@ -1,19 +1,19 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.swg.island.common.core;
+package ru.samwanderman.island.common.core;
 
 import java.io.IOException;
 
-import ru.swg.island.common.core.object.Level;
-import ru.swg.island.common.view.GuiLevel;
-import ru.swg.island.common.view.GuiTile;
-import ru.swg.wheelframework.event.event.KeyEvent;
-import ru.swg.wheelframework.event.event.MouseEvent;
-import ru.swg.wheelframework.event.interfaces.KeyEventInterface;
-import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
-import ru.swg.wheelframework.view.DisplayContainer;
-import ru.swg.wheelframework.view.figure.Point2D;
+import ru.samwanderman.island.common.core.object.Level;
+import ru.samwanderman.island.common.view.GuiLevel;
+import ru.samwanderman.island.common.view.GuiTile;
+import ru.samwanderman.rtwf.event.event.KeyEvent;
+import ru.samwanderman.rtwf.event.event.MouseEvent;
+import ru.samwanderman.rtwf.event.interfaces.KeyEventInterface;
+import ru.samwanderman.rtwf.event.interfaces.MouseEventInterface;
+import ru.samwanderman.rtwf.view.DisplayContainer;
+import ru.samwanderman.rtwf.view.figure.Point2D;
 
 /**
  * Simple GameBoard

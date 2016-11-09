@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ru.swg.island</groupId>
+  <groupId>ru.samwanderman.island</groupId>
   <artifactId>common</artifactId>
   <version>0.0.1</version>
   <name>Island common library</name>
@@ -21,13 +21,15 @@
   
   <dependencies>
     <dependency>
-      <groupId>ru.swg</groupId>
-      <artifactId>wheelframework</artifactId>
+      <groupId>ru.samwanderman</groupId>
+      <artifactId>rtwf</artifactId>
       <version>0.0.1</version>
     </dependency>
   </dependencies>
   
   <build>
+  	<finalName>common</finalName>
+  
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -1,34 +1,34 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.swg.island.common.view;
+package ru.samwanderman.island.common.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ru.swg.island.common.core.Const;
-import ru.swg.island.common.core.object.LandscapeTile;
-import ru.swg.island.common.core.object.Level;
-import ru.swg.island.common.core.object.ObjectTile;
-import ru.swg.island.common.core.object.TilePoint;
-import ru.swg.island.common.core.object.UnitTile;
-import ru.swg.island.common.io.IO;
-import ru.swg.wheelframework.ai.Logic;
-import ru.swg.wheelframework.core.Config;
-import ru.swg.wheelframework.event.Events;
-import ru.swg.wheelframework.event.event.GuiEvent;
-import ru.swg.wheelframework.event.event.KeyEvent;
-import ru.swg.wheelframework.event.event.MouseEvent;
-import ru.swg.wheelframework.event.interfaces.KeyEventInterface;
-import ru.swg.wheelframework.event.interfaces.MouseEventInterface;
-import ru.swg.wheelframework.log.Log;
-import ru.swg.wheelframework.view.Color;
-import ru.swg.wheelframework.view.DisplayObject;
-import ru.swg.wheelframework.view.Graphics;
-import ru.swg.wheelframework.view.figure.Point2D;
-import ru.swg.wheelframework.view.figure.Rectangle;
+import ru.samwanderman.island.common.core.Const;
+import ru.samwanderman.island.common.core.object.LandscapeTile;
+import ru.samwanderman.island.common.core.object.Level;
+import ru.samwanderman.island.common.core.object.ObjectTile;
+import ru.samwanderman.island.common.core.object.TilePoint;
+import ru.samwanderman.island.common.core.object.UnitTile;
+import ru.samwanderman.island.common.io.IO;
+import ru.samwanderman.rtwf.ai.Logic;
+import ru.samwanderman.rtwf.core.Config;
+import ru.samwanderman.rtwf.event.Events;
+import ru.samwanderman.rtwf.event.event.GuiEvent;
+import ru.samwanderman.rtwf.event.event.KeyEvent;
+import ru.samwanderman.rtwf.event.event.MouseEvent;
+import ru.samwanderman.rtwf.event.interfaces.KeyEventInterface;
+import ru.samwanderman.rtwf.event.interfaces.MouseEventInterface;
+import ru.samwanderman.rtwf.log.Log;
+import ru.samwanderman.rtwf.view.Color;
+import ru.samwanderman.rtwf.view.DisplayObject;
+import ru.samwanderman.rtwf.view.Graphics;
+import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.rtwf.view.figure.Rectangle;
 
 /**
  * Gui level
