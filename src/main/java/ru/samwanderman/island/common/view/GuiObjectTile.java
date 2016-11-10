@@ -6,8 +6,8 @@ package ru.samwanderman.island.common.view;
 import java.io.IOException;
 
 import ru.samwanderman.island.common.core.object.ObjectTile;
-import ru.samwanderman.rtwf.event.interfaces.SyncEventInterface;
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.event.interfaces.SyncEventInterface;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Gui object tile

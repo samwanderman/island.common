@@ -3,7 +3,7 @@
  */
 package ru.samwanderman.island.common.core.object;
 
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Tile with point

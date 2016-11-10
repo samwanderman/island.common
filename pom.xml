@@ -22,7 +22,7 @@
   <dependencies>
     <dependency>
       <groupId>ru.samwanderman</groupId>
-      <artifactId>rtwf</artifactId>
+      <artifactId>wheel</artifactId>
       <version>0.0.1</version>
     </dependency>
   </dependencies>

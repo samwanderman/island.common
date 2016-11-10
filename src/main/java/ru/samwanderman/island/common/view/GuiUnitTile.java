@@ -9,11 +9,11 @@ import java.util.LinkedList;
 import ru.samwanderman.island.common.animation.SimpleChangePositionAnimation;
 import ru.samwanderman.island.common.core.object.ObjectTile;
 import ru.samwanderman.island.common.core.object.UnitTile;
-import ru.samwanderman.rtwf.ai.Logic;
-import ru.samwanderman.rtwf.core.Config;
-import ru.samwanderman.rtwf.event.listener.ObjectListener;
-import ru.samwanderman.rtwf.view.Graphics;
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.ai.Logic;
+import ru.samwanderman.wheel.core.Config;
+import ru.samwanderman.wheel.event.listener.ObjectListener;
+import ru.samwanderman.wheel.view.Graphics;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Gui Unit tile

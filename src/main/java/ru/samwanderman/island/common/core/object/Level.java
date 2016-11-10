@@ -6,7 +6,7 @@ package ru.samwanderman.island.common.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Level

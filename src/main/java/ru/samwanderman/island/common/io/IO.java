@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import ru.samwanderman.island.common.core.object.Level;
 import ru.samwanderman.island.common.core.object.TilePoint;
-import ru.samwanderman.rtwf.io.Resources;
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.io.Resources;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Level save/load

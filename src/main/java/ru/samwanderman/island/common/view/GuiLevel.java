@@ -15,20 +15,20 @@ import ru.samwanderman.island.common.core.object.ObjectTile;
 import ru.samwanderman.island.common.core.object.TilePoint;
 import ru.samwanderman.island.common.core.object.UnitTile;
 import ru.samwanderman.island.common.io.IO;
-import ru.samwanderman.rtwf.ai.Logic;
-import ru.samwanderman.rtwf.core.Config;
-import ru.samwanderman.rtwf.event.Events;
-import ru.samwanderman.rtwf.event.event.GuiEvent;
-import ru.samwanderman.rtwf.event.event.KeyEvent;
-import ru.samwanderman.rtwf.event.event.MouseEvent;
-import ru.samwanderman.rtwf.event.interfaces.KeyEventInterface;
-import ru.samwanderman.rtwf.event.interfaces.MouseEventInterface;
-import ru.samwanderman.rtwf.log.Log;
-import ru.samwanderman.rtwf.view.Color;
-import ru.samwanderman.rtwf.view.DisplayObject;
-import ru.samwanderman.rtwf.view.Graphics;
-import ru.samwanderman.rtwf.view.figure.Point2D;
-import ru.samwanderman.rtwf.view.figure.Rectangle;
+import ru.samwanderman.wheel.ai.Logic;
+import ru.samwanderman.wheel.core.Config;
+import ru.samwanderman.wheel.event.Events;
+import ru.samwanderman.wheel.event.event.GuiEvent;
+import ru.samwanderman.wheel.event.event.KeyEvent;
+import ru.samwanderman.wheel.event.event.MouseEvent;
+import ru.samwanderman.wheel.event.interfaces.KeyEventInterface;
+import ru.samwanderman.wheel.event.interfaces.MouseEventInterface;
+import ru.samwanderman.wheel.log.Log;
+import ru.samwanderman.wheel.view.Color;
+import ru.samwanderman.wheel.view.DisplayObject;
+import ru.samwanderman.wheel.view.Graphics;
+import ru.samwanderman.wheel.view.figure.Point2D;
+import ru.samwanderman.wheel.view.figure.Rectangle;
 
 /**
  * Gui level

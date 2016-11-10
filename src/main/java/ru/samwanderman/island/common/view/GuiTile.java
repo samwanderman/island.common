@@ -5,11 +5,11 @@ package ru.samwanderman.island.common.view;
 
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.Tile;
-import ru.samwanderman.rtwf.view.Color;
-import ru.samwanderman.rtwf.view.Graphics;
-import ru.samwanderman.rtwf.view.Image;
-import ru.samwanderman.rtwf.view.figure.Point2D;
-import ru.samwanderman.rtwf.view.ui.GuiImage;
+import ru.samwanderman.wheel.view.Color;
+import ru.samwanderman.wheel.view.Graphics;
+import ru.samwanderman.wheel.view.Image;
+import ru.samwanderman.wheel.view.figure.Point2D;
+import ru.samwanderman.wheel.view.ui.GuiImage;
 
 public class GuiTile extends GuiImage {
 	private final Tile tile;

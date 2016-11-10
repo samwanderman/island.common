@@ -9,15 +9,15 @@ import java.util.LinkedList;
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.island.common.view.GuiUnitTile;
-import ru.samwanderman.rtwf.animation.Animation;
-import ru.samwanderman.rtwf.core.Config;
-import ru.samwanderman.rtwf.event.Events;
-import ru.samwanderman.rtwf.event.event.GuiRepaintEvent;
-import ru.samwanderman.rtwf.event.interfaces.GuiEventInterface;
-import ru.samwanderman.rtwf.event.listener.ObjectListener;
-import ru.samwanderman.rtwf.io.Resources;
-import ru.samwanderman.rtwf.view.Graphics;
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.animation.Animation;
+import ru.samwanderman.wheel.core.Config;
+import ru.samwanderman.wheel.event.Events;
+import ru.samwanderman.wheel.event.event.GuiRepaintEvent;
+import ru.samwanderman.wheel.event.interfaces.GuiEventInterface;
+import ru.samwanderman.wheel.event.listener.ObjectListener;
+import ru.samwanderman.wheel.io.Resources;
+import ru.samwanderman.wheel.view.Graphics;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Animation for simple change position - just coordinates

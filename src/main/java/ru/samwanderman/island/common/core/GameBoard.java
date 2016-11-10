@@ -8,12 +8,12 @@ import java.io.IOException;
 import ru.samwanderman.island.common.core.object.Level;
 import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.island.common.view.GuiTile;
-import ru.samwanderman.rtwf.event.event.KeyEvent;
-import ru.samwanderman.rtwf.event.event.MouseEvent;
-import ru.samwanderman.rtwf.event.interfaces.KeyEventInterface;
-import ru.samwanderman.rtwf.event.interfaces.MouseEventInterface;
-import ru.samwanderman.rtwf.view.DisplayContainer;
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.event.event.KeyEvent;
+import ru.samwanderman.wheel.event.event.MouseEvent;
+import ru.samwanderman.wheel.event.interfaces.KeyEventInterface;
+import ru.samwanderman.wheel.event.interfaces.MouseEventInterface;
+import ru.samwanderman.wheel.view.DisplayContainer;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Simple GameBoard

@@ -4,7 +4,7 @@
 package ru.samwanderman.island.common.view;
 
 import ru.samwanderman.island.common.core.object.LandscapeTile;
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * LandscapeTile

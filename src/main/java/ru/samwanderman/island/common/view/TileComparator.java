@@ -5,7 +5,7 @@ package ru.samwanderman.island.common.view;
 
 import java.util.Comparator;
 
-import ru.samwanderman.rtwf.view.figure.Point2D;
+import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * GuiTile comparator
