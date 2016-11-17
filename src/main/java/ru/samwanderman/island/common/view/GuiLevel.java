@@ -19,10 +19,10 @@ import ru.samwanderman.wheel.ai.Logic;
 import ru.samwanderman.wheel.core.Config;
 import ru.samwanderman.wheel.event.Events;
 import ru.samwanderman.wheel.event.event.GuiEvent;
+import ru.samwanderman.wheel.event.event.IKeyEvent;
+import ru.samwanderman.wheel.event.event.IMouseEvent;
 import ru.samwanderman.wheel.event.event.KeyEvent;
 import ru.samwanderman.wheel.event.event.MouseEvent;
-import ru.samwanderman.wheel.event.interfaces.KeyEventInterface;
-import ru.samwanderman.wheel.event.interfaces.MouseEventInterface;
 import ru.samwanderman.wheel.log.Log;
 import ru.samwanderman.wheel.view.Color;
 import ru.samwanderman.wheel.view.DisplayObject;
@@ -33,7 +33,7 @@ import ru.samwanderman.wheel.view.figure.Rectangle;
 /**
  * Gui level
  */
-public class GuiLevel extends DisplayObject implements MouseEventInterface, KeyEventInterface {
+public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 	// level base info
 	private final Level level;
 	

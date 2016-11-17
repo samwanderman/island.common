@@ -3,84 +3,52 @@
  */
 package ru.samwanderman.island.common.animation;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.view.GuiLevel;
-import ru.samwanderman.island.common.view.GuiUnitTile;
-import ru.samwanderman.wheel.animation.Animation;
+import ru.samwanderman.island.common.view.GuiTile;
+import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.core.Config;
 import ru.samwanderman.wheel.event.Events;
 import ru.samwanderman.wheel.event.event.GuiRepaintEvent;
-import ru.samwanderman.wheel.event.interfaces.GuiEventInterface;
 import ru.samwanderman.wheel.event.listener.ObjectListener;
-import ru.samwanderman.wheel.io.Resources;
-import ru.samwanderman.wheel.view.Graphics;
+import ru.samwanderman.wheel.view.Image;
 import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
- * Animation for simple change position - just coordinates
+ * Change position animation 
  */
-public final class SimpleChangePositionAnimation extends Animation implements GuiEventInterface {
-	private SimpleClipAnimation clipAnimation = null;
-	private final GuiUnitTile target;
-	private final LinkedList<Point2D> path;
-	private final ObjectListener<Integer> onSuccess;
-	private final ObjectListener<Point2D> onError;
+public final class ChangePositionAnimation implements IAnimation {
+	private final GuiTile target;
+	private final IAnimation animation;
+	private ObjectListener<Object> successCallback;
+	private ObjectListener<Object> errorCallback;
+	private LinkedList<Point2D> path;
+	private int speed;
 	private Point2D prevPoint, nextPoint;
-	private final int speed;
 	private int step;
 	
-	public SimpleChangePositionAnimation(
-			final GuiUnitTile target, 
-			final LinkedList<Point2D> path, 
-			final int speed, 
-			final ObjectListener<Integer> onSuccess, 
-			final ObjectListener<Point2D> onError) {
-		
-		try {
-			clipAnimation = new SimpleClipAnimation(target, Resources.loadAnimation("units/unit1/walk"), Config.GLOBAL_TIMER_STEP * 100);
-		} catch (final IOException e) { }
-		
+	public ChangePositionAnimation(final GuiTile target, final IAnimation animation) {
 		this.target = target;
-		this.path = path;
-		this.speed = speed / (path.size() - 1);
-		this.onSuccess = onSuccess;
-		this.onError = onError;
-		step = 0;
-		
-		if (!path.isEmpty()) {
-			prevPoint = path.pop();
-		}
+		this.animation = animation;
 	}
 	
-	@Override
-	public final void start() {
-		super.start();
-		clipAnimation.start();
+	public final void setSuccessCallback(final ObjectListener<Object> successCallback) {
+		this.successCallback = successCallback;
 	}
 	
-	@Override
-	public final void stop() {
-		super.stop();
-		clipAnimation.stop();
+	public final void setErrorCallback(final ObjectListener<Object> errorCallback) {
+		this.errorCallback = errorCallback;
 	}
-	
+
 	@Override
-	public final void reset() {
-		stop();
-		step = 0;
-	}
-	
-	@Override
-	public final void run() {
-		// skip if not running
-		if (!isRunning() && (prevPoint != null)) {
+	public final void sync() {
+		if (!animation.isRunning() && (prevPoint != null)) {
 			return;
 		}
 		
-		clipAnimation.run();
+		animation.sync();
 		
 		// only in 1st time and when next step
 		if ((nextPoint == null) || (step >= speed)) {
@@ -88,12 +56,13 @@ public final class SimpleChangePositionAnimation extends Animation implements Gu
 			if (path.isEmpty() && (nextPoint != null)) {
 				target.setX(nextPoint.getX() * Const.TILE_WIDTH);
 				target.setY(nextPoint.getY() * Const.TILE_HEIGHT);
-				reset();
+				pause();
 				
 				// animation ended successfully
-				if (onSuccess != null) {
-					onSuccess.on(0);
+				if (successCallback != null) {
+					successCallback.on(0);
 				}
+				
 				return;
 			}
 			
@@ -117,10 +86,10 @@ public final class SimpleChangePositionAnimation extends Animation implements Gu
 				return;
 				
 			default:
-				reset();
+				pause();
 				
-				if (onError != null) {
-					onError.on(path.peekFirst());
+				if (errorCallback != null) {
+					errorCallback.on(path.peekFirst());
 				}
 				return;
 			}
@@ -138,9 +107,43 @@ public final class SimpleChangePositionAnimation extends Animation implements Gu
 	}
 
 	@Override
-	public final void paint(final Graphics graphics) {
-		if (isRunning() && (clipAnimation != null)) {
-			clipAnimation.paint(graphics);
+	public final boolean isRunning() {
+		return animation.isRunning();
+	}
+
+	@Override
+	public final void play() {
+		animation.play();
+	}
+
+	@Override
+	public final void pause() {
+		animation.pause();
+	}
+
+	@Override
+	public final void stop() {
+		animation.stop();
+		if (successCallback != null) {
+			successCallback.on(null);
 		}
+	}
+	
+	public final void setPath(final LinkedList<Point2D> path, final int speed) {
+		stop();
+		this.path = path;
+		this.speed = speed / (path.size() - 1);
+		prevPoint = null;
+		nextPoint = null;
+		step = 0;
+		
+		if (!path.isEmpty()) {
+			prevPoint = path.pop();
+		}
+	}
+
+	@Override
+	public final Image getImage() {
+		return animation.getImage();
 	}
 }

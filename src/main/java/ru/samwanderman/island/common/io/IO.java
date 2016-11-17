@@ -34,7 +34,7 @@ public class IO {
 	}
 	
 	/**
-	 * Load all tiles for given type from standart folders
+	 * Load all tiles for given type from standard folders
 	 * 
 	 * @return
 	 * @throws IOException

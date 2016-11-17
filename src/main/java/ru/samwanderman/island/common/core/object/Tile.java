@@ -3,6 +3,9 @@
  */
 package ru.samwanderman.island.common.core.object;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class for tiles
  */
@@ -17,6 +20,9 @@ public class Tile {
 	private int weight;
 	// z-index of tile
 	private int z;
+	private List<String> animations = new ArrayList<>();
+	
+	public Tile() { }
 	
 	/**
 	 * Get id
@@ -106,5 +112,9 @@ public class Tile {
 	 */
 	public final int getZ() {
 		return z;
+	}
+	
+	public final List<String> getAnimations() {
+		return animations;
 	}
 }
