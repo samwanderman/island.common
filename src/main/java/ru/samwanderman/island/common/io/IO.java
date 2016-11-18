@@ -8,9 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import ru.samwanderman.island.common.core.GameCommand;
 import ru.samwanderman.island.common.core.object.Level;
 import ru.samwanderman.island.common.core.object.TilePoint;
 import ru.samwanderman.wheel.io.Resources;
@@ -74,8 +77,28 @@ public class IO {
 		level.setObjectTiles(objectTiles);
 		level.setUnitTiles(unitTiles);
 		
+		final List<GameCommand> commands = new ArrayList<>();
+		final JsonNode commandsNode = json.get("commands");
+		Iterator<JsonNode> iterator = commandsNode.elements();
+		while (iterator.hasNext()) {
+			final JsonNode node = iterator.next();
+			
+			GameCommand command = new GameCommand(node.get("id").asInt(), node.get("name").asText());
+			
+			final JsonNode resources = node.get("resources");
+			final Iterator<Entry<String, JsonNode>> nodes = resources.fields();
+
+			while (nodes.hasNext()) {
+			  final Map.Entry<String, JsonNode> resource = (Map.Entry<String, JsonNode>) nodes.next();
+			  command.addResource(resource.getKey(), resource.getValue().asInt());
+			}
+			
+			commands.add(command);
+			level.setCommands(commands);
+		}
+		
+		
 		JsonNode tilesNode = json.get("landscapeTiles");
-		Iterator<JsonNode> iterator = null;
 		if (tilesNode != null) {
 			iterator = tilesNode.elements();
 			while (iterator.hasNext()) {

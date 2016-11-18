@@ -1,7 +1,7 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.samwanderman.island.common.view;
+package ru.samwanderman.island.common.view.tile;
 
 import java.util.Comparator;
 

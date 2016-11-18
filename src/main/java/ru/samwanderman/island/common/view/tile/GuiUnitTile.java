@@ -1,7 +1,7 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.samwanderman.island.common.view;
+package ru.samwanderman.island.common.view.tile;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -10,6 +10,7 @@ import java.util.List;
 import ru.samwanderman.island.common.animation.ChangePositionAnimation;
 import ru.samwanderman.island.common.core.object.ObjectTile;
 import ru.samwanderman.island.common.core.object.UnitTile;
+import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.wheel.ai.Logic;
 import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.core.Config;

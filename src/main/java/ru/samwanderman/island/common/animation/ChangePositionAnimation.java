@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.view.GuiLevel;
-import ru.samwanderman.island.common.view.GuiTile;
+import ru.samwanderman.island.common.view.tile.GuiTile;
 import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.core.Config;
 import ru.samwanderman.wheel.event.Events;

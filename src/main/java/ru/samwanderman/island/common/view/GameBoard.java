@@ -1,13 +1,12 @@
 /**
  * @author Potapov Sergei (sam-wanderman@yandex.ru)
  */
-package ru.samwanderman.island.common.core;
+package ru.samwanderman.island.common.view;
 
 import java.io.IOException;
 
 import ru.samwanderman.island.common.core.object.Level;
-import ru.samwanderman.island.common.view.GuiLevel;
-import ru.samwanderman.island.common.view.GuiTile;
+import ru.samwanderman.island.common.view.tile.GuiTile;
 import ru.samwanderman.wheel.event.event.IKeyEvent;
 import ru.samwanderman.wheel.event.event.IMouseEvent;
 import ru.samwanderman.wheel.event.event.KeyEvent;

@@ -6,6 +6,7 @@ package ru.samwanderman.island.common.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.samwanderman.island.common.core.GameCommand;
 import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
@@ -26,6 +27,7 @@ public final class Level {
 	private List<TilePoint> objectTiles = new ArrayList<>();
 	// units tiles
 	private List<TilePoint> unitTiles = new ArrayList<>();
+	private List<GameCommand> commands;
 	
 	/**
 	 * Set id
@@ -287,5 +289,13 @@ public final class Level {
 				}
 			}
 		}
+	}
+	
+	public final void setCommands(final List<GameCommand> commands) {
+		this.commands = commands;
+	}
+	
+	public final List<GameCommand> getCommands() {
+		return commands;
 	}
 }
