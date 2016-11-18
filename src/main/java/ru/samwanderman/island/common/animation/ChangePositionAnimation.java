@@ -20,6 +20,7 @@ import ru.samwanderman.wheel.view.figure.Point2D;
  * Change position animation 
  */
 public final class ChangePositionAnimation implements IAnimation {
+	private boolean running = false;
 	private final GuiTile target;
 	private final IAnimation animation;
 	private ObjectListener<Object> successCallback;
@@ -44,7 +45,7 @@ public final class ChangePositionAnimation implements IAnimation {
 
 	@Override
 	public final void sync() {
-		if (!animation.isRunning() && (prevPoint != null)) {
+		if (!running && (prevPoint != null)) {
 			return;
 		}
 		
@@ -108,21 +109,24 @@ public final class ChangePositionAnimation implements IAnimation {
 
 	@Override
 	public final boolean isRunning() {
-		return animation.isRunning();
+		return running;
 	}
 
 	@Override
 	public final void play() {
+		running = true;
 		animation.play();
 	}
 
 	@Override
 	public final void pause() {
+		running = false;
 		animation.pause();
 	}
 
 	@Override
 	public final void stop() {
+		running = false;
 		animation.stop();
 		if (successCallback != null) {
 			successCallback.on(null);
@@ -130,7 +134,7 @@ public final class ChangePositionAnimation implements IAnimation {
 	}
 	
 	public final void setPath(final LinkedList<Point2D> path, final int speed) {
-		stop();
+		animation.stop();
 		this.path = path;
 		this.speed = speed / (path.size() - 1);
 		prevPoint = null;

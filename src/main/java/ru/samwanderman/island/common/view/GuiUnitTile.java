@@ -41,7 +41,7 @@ public class GuiUnitTile extends GuiObjectTile {
 		if ((path == null) || (path.size() <= 1)) {
 			return;
 		}
-		
+
 		final ChangePositionAnimation animation = (ChangePositionAnimation) getAnimation("walk");
 		animation.setPath(path, (path.size() - 1) * Config.GLOBAL_TIMER_STEP * 100);
 		playAnimation("walk");

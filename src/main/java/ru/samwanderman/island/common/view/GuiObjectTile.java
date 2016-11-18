@@ -78,7 +78,6 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		
 		currentAnimation = animations.get(name);
 		if (currentAnimation != null) {
-			Log.info("play ObjectTile");
 			currentAnimation.play();
 		}
 	}
