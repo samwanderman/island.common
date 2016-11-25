@@ -14,9 +14,9 @@ import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.event.event.ISyncEvent;
 import ru.samwanderman.wheel.io.Resources;
 import ru.samwanderman.wheel.log.Log;
+import ru.samwanderman.wheel.view.Color;
 import ru.samwanderman.wheel.view.Graphics;
 import ru.samwanderman.wheel.view.Image;
-import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * Gui object tile
@@ -30,18 +30,6 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		super(tile);
 		setupAnimations(tile.getAnimations());
 	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param tile
-	 * @param point
-	 */
-	public GuiObjectTile(final ObjectTile tile, final Point2D point) 
-			throws IOException {
-		super(tile, point);
-		setupAnimations(tile.getAnimations());
-	}
 	
 	@Override
 	public void paint(final Graphics graphics) {
@@ -49,10 +37,14 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 			final Image image = currentAnimation.getImage(); 
 			graphics.drawImage(image, getAbsoluteX() + (Const.TILE_WIDTH - image.getWidth()) / 2, getAbsoluteY() + (Const.TILE_HEIGHT - image.getHeight()) / 2);
 			paintSelection(graphics);
+			graphics.setColor(Color.GREEN);
+			graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * ((float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth())), 2);
 			return;
 		}
-		
+
 		super.paint(graphics);
+		graphics.setColor(Color.GREEN);
+		graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * ((float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth())), 2);
 	}
 
 	@Override
@@ -60,6 +52,24 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		if (currentAnimation != null) {
 			currentAnimation.sync();
 		}
+	}
+	
+	@Override
+	protected final void paintSelection(final Graphics graphics) {
+		if (isSelected()) {
+			final ObjectTile tile = (ObjectTile) getTile();
+			Color color = Color.GRAY;
+			switch (tile.getGameCommand()) {
+			case 1:
+				color = Color.GREEN;
+				break;
+			case 2:
+				color = Color.RED;
+				break;
+			}
+			graphics.setColor(color);
+			graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
+		}		
 	}
 	
 	protected void setupAnimations(final List<String> names) {

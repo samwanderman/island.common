@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ru.samwanderman.island.common.animation.ChangePositionAnimation;
-import ru.samwanderman.island.common.core.object.ObjectTile;
 import ru.samwanderman.island.common.core.object.UnitTile;
 import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.wheel.ai.Logic;
@@ -26,11 +25,6 @@ public class GuiUnitTile extends GuiObjectTile {
 	public GuiUnitTile(final UnitTile tile) 
 			throws IOException {
 		super(tile);
-	}
-	
-	public GuiUnitTile(final ObjectTile tile, final Point2D point) 
-			throws IOException {
-		super(tile, point);
 	}
 	
 	/**

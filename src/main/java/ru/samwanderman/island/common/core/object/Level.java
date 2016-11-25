@@ -22,11 +22,11 @@ public final class Level {
 	// height in cells
 	private int height;
 	// landscape tiles list
-	private List<TilePoint> landscapeTiles = new ArrayList<>();
+	private List<LandscapeTile> landscapeTiles = new ArrayList<>();
 	// object tiles
-	private List<TilePoint> objectTiles = new ArrayList<>();
+	private List<ObjectTile> objectTiles = new ArrayList<>();
 	// units tiles
-	private List<TilePoint> unitTiles = new ArrayList<>();
+	private List<UnitTile> unitTiles = new ArrayList<>();
 	private List<GameCommand> commands;
 	
 	/**
@@ -124,7 +124,7 @@ public final class Level {
 	 * 
 	 * @return
 	 */
-	public final List<TilePoint> getLandscapeTiles() {
+	public final List<LandscapeTile> getLandscapeTiles() {
 		return landscapeTiles;
 	}
 
@@ -133,7 +133,7 @@ public final class Level {
 	 * 
 	 * @param tiles
 	 */
-	public final void setLandscapeTiles(final List<TilePoint> tiles) {
+	public final void setLandscapeTiles(final List<LandscapeTile> tiles) {
 		if (tiles != null) {
 			landscapeTiles = tiles;
 		} else {
@@ -146,7 +146,7 @@ public final class Level {
 	 * 
 	 * @param tile
 	 */
-	public final void setLandscapeTile(final TilePoint tile) {
+	public final void setLandscapeTile(final LandscapeTile tile) {
 		for (int i = 0; i < landscapeTiles.size(); i++) {
 			if (landscapeTiles.get(i).getPoint().equals(tile.getPoint())) {
 				landscapeTiles.set(i, tile);
@@ -158,10 +158,10 @@ public final class Level {
 	}
 	
 	public final boolean removeLandscapeTile(final Point2D point) {
-		for (final TilePoint tile: landscapeTiles) {
+		for (final LandscapeTile tile: landscapeTiles) {
 			if (tile.getPoint().equals(point)) {
 				final boolean res = landscapeTiles.remove(tile);
-				landscapeTiles.add(new TilePoint("empty", point));
+				landscapeTiles.add(new LandscapeTile(point));
 				return res;
 			}
 		}
@@ -170,7 +170,7 @@ public final class Level {
 	}
 	
 	public final boolean hasLandscapeTile(final Point2D point) {
-		for (final TilePoint tile: landscapeTiles) {
+		for (final LandscapeTile tile: landscapeTiles) {
 			if (tile.getPoint().equals(point)) {
 				return true;
 			}
@@ -184,7 +184,7 @@ public final class Level {
 	 * 
 	 * @return
 	 */
-	public final List<TilePoint> getObjectTiles() {
+	public final List<ObjectTile> getObjectTiles() {
 		return objectTiles;
 	}
 	
@@ -193,7 +193,7 @@ public final class Level {
 	 * 
 	 * @param tiles
 	 */
-	public final void setObjectTiles(final List<TilePoint> tiles) {
+	public final void setObjectTiles(final List<ObjectTile> tiles) {
 		if (tiles != null) {
 			objectTiles = tiles;
 		} else {
@@ -206,7 +206,7 @@ public final class Level {
 	 * 
 	 * @param tile
 	 */
-	public final void setObjectTile(final TilePoint tile) {
+	public final void setObjectTile(final ObjectTile tile) {
 		for (int i = 0; i < objectTiles.size(); i++) {
 			if (objectTiles.get(i).getPoint().equals(tile.getPoint())) {
 				objectTiles.set(i, tile);
@@ -218,7 +218,7 @@ public final class Level {
 	}
 	
 	public final boolean removeObjectTile(final Point2D point) {
-		for (final TilePoint tile: objectTiles) {
+		for (final ObjectTile tile: objectTiles) {
 			if (tile.getPoint().equals(point)) {
 				return objectTiles.remove(tile);
 			}
@@ -228,7 +228,7 @@ public final class Level {
 	}
 	
 	public final boolean hasObjectTile(final Point2D point) {
-		for (final TilePoint tile: objectTiles) {
+		for (final ObjectTile tile: objectTiles) {
 			if (tile.getPoint().equals(point)) {
 				return true;
 			}
@@ -237,11 +237,11 @@ public final class Level {
 		return false;
 	}
 	
-	public final List<TilePoint> getUnitTiles() {
+	public final List<UnitTile> getUnitTiles() {
 		return unitTiles;
 	}
 	
-	public final void setUnitTiles(final List<TilePoint> tiles) {
+	public final void setUnitTiles(final List<UnitTile> tiles) {
 		if (tiles != null) {
 			unitTiles = tiles;
 		} else {
@@ -249,7 +249,7 @@ public final class Level {
 		}
 	}
 	
-	public final void setUnitTile(final TilePoint tile) {
+	public final void setUnitTile(final UnitTile tile) {
 		for (int i = 0; i < unitTiles.size(); i++) {
 			if (unitTiles.get(i).getPoint().equals(tile.getPoint())) {
 				unitTiles.set(i, tile);
@@ -261,7 +261,7 @@ public final class Level {
 	}
 	
 	public final boolean removeUnitTile(final Point2D point) {
-		for (final TilePoint tile: unitTiles) {
+		for (final UnitTile tile: unitTiles) {
 			if (tile.getPoint().equals(point)) {
 				return unitTiles.remove(tile);
 			}
@@ -271,7 +271,7 @@ public final class Level {
 	}
 	
 	protected final boolean hasUnitTile(final Point2D point) {
-		for (final TilePoint tile: unitTiles) {
+		for (final UnitTile tile: unitTiles) {
 			if (tile.getPoint().equals(point)) {
 				return true;
 			}
@@ -285,7 +285,7 @@ public final class Level {
 			for (int j = 0; j < height; j++) {
 				final Point2D point = new Point2D(i, j);
 				if (!hasLandscapeTile(point)) {
-					landscapeTiles.add(new TilePoint("empty", point));
+					landscapeTiles.add(new LandscapeTile(point));
 				}
 			}
 		}

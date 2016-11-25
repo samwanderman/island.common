@@ -12,9 +12,7 @@ import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.LandscapeTile;
 import ru.samwanderman.island.common.core.object.Level;
 import ru.samwanderman.island.common.core.object.ObjectTile;
-import ru.samwanderman.island.common.core.object.TilePoint;
 import ru.samwanderman.island.common.core.object.UnitTile;
-import ru.samwanderman.island.common.io.IO;
 import ru.samwanderman.island.common.view.tile.GuiLandscapeTile;
 import ru.samwanderman.island.common.view.tile.GuiObjectTile;
 import ru.samwanderman.island.common.view.tile.GuiTile;
@@ -39,6 +37,7 @@ import ru.samwanderman.wheel.view.figure.Rectangle;
  * Gui level
  */
 public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
+	private static final int PLAYER_COMMAND = 1;
 	// level base info
 	private final Level level;
 	
@@ -187,7 +186,8 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 		if (editMode) {
 			if (intendedTile != null) {
 				try {
-					addTile(intendedTile, point);
+					intendedTile.setPoint(point);
+					addTile(intendedTile);
 					setIntentTile(null);
 				} catch (final IOException err) { }
 				return;
@@ -200,7 +200,9 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 				clearSelectedTiles();
 				final GuiTile _tile = getObjectAtPoint(point);
 				if (_tile != null) {
-					selectedTiles.add(_tile);
+					if (((ObjectTile) _tile.getTile()).getGameCommand() == PLAYER_COMMAND) {
+						selectedTiles.add(_tile);
+					}
 				}
 				break;
 			case 3:
@@ -277,14 +279,14 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 	 * @param point
 	 * @throws IOException
 	 */
-	public final <T extends GuiTile> void addTile(final T tile, final Point2D point) 
+	public final <T extends GuiTile> void addTile(final T tile) 
 			throws IOException {
 		if (tile instanceof GuiLandscapeTile) {
-			level.setLandscapeTile(new TilePoint(tile.getTile().getId(), point));
+			level.setLandscapeTile((LandscapeTile) tile.getTile());
 		} else if (tile instanceof GuiUnitTile) {
-			level.setUnitTile(new TilePoint(tile.getTile().getId(), point));
+			level.setUnitTile((UnitTile) tile.getTile());
 		} else if (tile instanceof GuiObjectTile) {
-			level.setObjectTile(new TilePoint(tile.getTile().getId(), point));
+			level.setObjectTile((ObjectTile) tile.getTile());
 		}
 		
 		update();
@@ -293,37 +295,33 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 	@Override
 	protected final void update() {
 		landscapeTiles.clear();
-		for (final TilePoint tilePoint: level.getLandscapeTiles()) {
-			try {
-				final GuiLandscapeTile tile = new GuiLandscapeTile(IO.loadTile("./landscape/" + tilePoint.getTile(), LandscapeTile.class), tilePoint.getPoint());
-				tile.setParent(this);
-				landscapeTiles.add(tile);
-			} catch (final IOException e) {
-				Log.error("Can't load landscape tile " + tilePoint.getTile());
-			}
+		for (final LandscapeTile landscapeTile: level.getLandscapeTiles()) {
+			final GuiLandscapeTile tile = new GuiLandscapeTile(landscapeTile);
+			tile.setParent(this);
+			landscapeTiles.add(tile);
 		}
 		Collections.sort(landscapeTiles, new TileComparator<GuiLandscapeTile>());
 		
 		objectTiles.clear();
-		for (final TilePoint tilePoint: level.getObjectTiles()) {
+		for (final ObjectTile objectTile: level.getObjectTiles()) {
 			try {
-				final GuiObjectTile tile = new GuiObjectTile(IO.loadTile("./objects/" + tilePoint.getTile(), ObjectTile.class), tilePoint.getPoint());
+				final GuiObjectTile tile = new GuiObjectTile(objectTile);
 				tile.setParent(this);
 				objectTiles.add(tile);
 			} catch (final IOException e) {
 				Log.error(e.getLocalizedMessage());
-				Log.error("Can't load object tile " + tilePoint.getTile());
+				Log.error("Can't load object tile " + objectTile.getName());
 			}
 		}
 		
-		for (final TilePoint tilePoint: level.getUnitTiles()) {
+		for (final UnitTile unitTile: level.getUnitTiles()) {
 			try {
-				final GuiUnitTile tile = new GuiUnitTile(IO.loadTile("./units/" + tilePoint.getTile(), UnitTile.class), tilePoint.getPoint());
+				final GuiUnitTile tile = new GuiUnitTile(unitTile);
 				tile.setParent(this);
 				objectTiles.add(tile);
 			} catch (final IOException e) {
 				Log.error(e.getLocalizedMessage());
-				Log.error("Can't load unit tile " + tilePoint.getTile());
+				Log.error("Can't load unit tile " + unitTile.getName());
 			}
 		}
 		Collections.sort(objectTiles, new TileComparator<GuiObjectTile>());
@@ -394,8 +392,10 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 	private final void setSelectedTilesBySelection() {
 		for (final GuiObjectTile tile: objectTiles) {
 			if ((tile instanceof GuiUnitTile) && selection.contains(tile.getBoundRect())) {
-				tile.setSelected(true);
-				selectedTiles.add(tile);
+				if (((ObjectTile) tile.getTile()).getGameCommand() == PLAYER_COMMAND) {
+					tile.setSelected(true);
+					selectedTiles.add(tile);
+				}
 			}
 		}
 	}

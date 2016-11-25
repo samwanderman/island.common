@@ -14,8 +14,10 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import ru.samwanderman.island.common.core.GameCommand;
+import ru.samwanderman.island.common.core.object.LandscapeTile;
 import ru.samwanderman.island.common.core.object.Level;
-import ru.samwanderman.island.common.core.object.TilePoint;
+import ru.samwanderman.island.common.core.object.ObjectTile;
+import ru.samwanderman.island.common.core.object.UnitTile;
 import ru.samwanderman.wheel.io.Resources;
 import ru.samwanderman.wheel.view.figure.Point2D;
 
@@ -70,9 +72,9 @@ public class IO {
 		level.setWidth(json.get("width").asInt(0));
 		level.setHeight(json.get("height").asInt(0));
 		
-		final List<TilePoint> landscapeTiles = new ArrayList<>();
-		final List<TilePoint> objectTiles = new ArrayList<>();
-		final List<TilePoint> unitTiles = new ArrayList<>();
+		final List<LandscapeTile> landscapeTiles = new ArrayList<>();
+		final List<ObjectTile> objectTiles = new ArrayList<>();
+		final List<UnitTile> unitTiles = new ArrayList<>();
 		level.setLandscapeTiles(landscapeTiles);
 		level.setObjectTiles(objectTiles);
 		level.setUnitTiles(unitTiles);
@@ -104,7 +106,8 @@ public class IO {
 			while (iterator.hasNext()) {
 				final JsonNode node = iterator.next();
 				final Point2D point = new Point2D(node.get("point").get("x").asInt(0), node.get("point").get("y").asInt(0));
-				final TilePoint tile = new TilePoint(node.get("tile").asText(), point);
+				final LandscapeTile tile = IO.loadTile("./landscape/" + node.get("tile").asText(), LandscapeTile.class);
+				tile.setPoint(point);
 				landscapeTiles.add(tile);
 			}
 		}
@@ -115,7 +118,17 @@ public class IO {
 			while (iterator.hasNext()) {
 				final JsonNode node = iterator.next();
 				final Point2D point = new Point2D(node.get("point").get("x").asInt(0), node.get("point").get("y").asInt(0));
-				final TilePoint tile = new TilePoint(node.get("tile").asText(), point);
+				final ObjectTile tile = IO.loadTile("./objects/" + node.get("tile").asText(), ObjectTile.class);
+				tile.setPoint(point);
+				if (node.get("gameCommand") != null) {
+					tile.setGameCommand(node.get("gameCommand").asInt());
+				}
+				if (node.get("health") != null) {
+					tile.setHealth(node.get("health").asInt());
+				}
+				if (node.get("maxHealth") != null) {
+					tile.setHealth(node.get("maxHealth").asInt());
+				}
 				objectTiles.add(tile);
 			}
 		}
@@ -126,7 +139,17 @@ public class IO {
 			while (iterator.hasNext()) {
 				final JsonNode node = iterator.next();
 				final Point2D point = new Point2D(node.get("point").get("x").asInt(0), node.get("point").get("y").asInt(0));
-				final TilePoint tile = new TilePoint(node.get("tile").asText(), point);
+				final UnitTile tile = IO.loadTile("./units/" + node.get("tile").asText(), UnitTile.class);
+				tile.setPoint(point);
+				if (node.get("gameCommand") != null) {
+					tile.setGameCommand(node.get("gameCommand").asInt());
+				}
+				if (node.get("health") != null) {
+					tile.setHealth(node.get("health").asInt());
+				}
+				if (node.get("maxHealth") != null) {
+					tile.setHealth(node.get("maxHealth").asInt());
+				}
 				unitTiles.add(tile);
 			}
 		}

@@ -6,6 +6,8 @@ package ru.samwanderman.island.common.core.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.samwanderman.wheel.view.figure.Point2D;
+
 /**
  * Class for tiles
  */
@@ -21,8 +23,13 @@ public class Tile {
 	// z-index of tile
 	private int z;
 	private List<String> animations = new ArrayList<>();
+	private Point2D point;
 	
 	public Tile() { }
+	
+	public Tile(final Point2D point) {
+		this.point = point;
+	}
 	
 	/**
 	 * Get id
@@ -116,5 +123,13 @@ public class Tile {
 	
 	public final List<String> getAnimations() {
 		return animations;
+	}
+	
+	public final void setPoint(final Point2D point) {
+		this.point = point;
+	}
+	
+	public final Point2D getPoint() {
+		return point;
 	}
 }

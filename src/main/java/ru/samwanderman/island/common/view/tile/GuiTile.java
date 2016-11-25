@@ -13,19 +13,13 @@ import ru.samwanderman.wheel.view.ui.GuiImage;
 
 public class GuiTile extends GuiImage {
 	private final Tile tile;
-	private Point2D point;
 	private boolean selected = false;
 	
 	public GuiTile(final Tile tile) {
 		super(tile.getImage());
 		this.tile = tile;
-	}
-	
-	public GuiTile(final Tile tile, final Point2D point) {
-		this(tile);
-		this.point = point;
-		setX(point.getX() * Const.TILE_WIDTH);
-		setY(point.getY() * Const.TILE_HEIGHT);
+		setX(tile.getPoint().getX() * Const.TILE_WIDTH);
+		setY(tile.getPoint().getY() * Const.TILE_HEIGHT);
 		setZ(tile.getZ());
 		setWidth(Const.TILE_WIDTH);
 		setHeight(Const.TILE_HEIGHT);
@@ -41,7 +35,7 @@ public class GuiTile extends GuiImage {
 		paintSelection(graphics);
 	}
 	
-	protected final void paintSelection(final Graphics graphics) {
+	protected void paintSelection(final Graphics graphics) {
 		if (selected) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
@@ -53,14 +47,18 @@ public class GuiTile extends GuiImage {
 	}
 
 	public final Point2D getPoint() {
-		return point;
+		return tile.getPoint();
 	}
 	
 	public final void setPoint(final Point2D point) {
-		this.point = point;
+		tile.setPoint(point);
 	}
 	
 	public final void setSelected(final boolean selected) {
 		this.selected = selected;
+	}
+	
+	public final boolean isSelected() {
+		return selected;
 	}
 }
