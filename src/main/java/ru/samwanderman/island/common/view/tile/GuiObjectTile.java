@@ -43,8 +43,16 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		}
 
 		super.paint(graphics);
-		graphics.setColor(Color.GREEN);
-		graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * ((float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth())), 2);
+		
+		final float perc = (float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth();
+		if (perc <= 0.33) {
+			graphics.setColor(Color.RED);	
+		} else if (perc <= 0.66) {
+			graphics.setColor(Color.YELLOW);
+		} else {
+			graphics.setColor(Color.GREEN);	
+		}
+		graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * perc), 2);
 	}
 
 	@Override
