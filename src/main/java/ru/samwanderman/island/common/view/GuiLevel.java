@@ -24,6 +24,7 @@ import ru.samwanderman.wheel.event.Events;
 import ru.samwanderman.wheel.event.event.GuiEvent;
 import ru.samwanderman.wheel.event.event.IKeyEvent;
 import ru.samwanderman.wheel.event.event.IMouseEvent;
+import ru.samwanderman.wheel.event.event.ISyncEvent;
 import ru.samwanderman.wheel.event.event.KeyEvent;
 import ru.samwanderman.wheel.event.event.MouseEvent;
 import ru.samwanderman.wheel.log.Log;
@@ -36,7 +37,7 @@ import ru.samwanderman.wheel.view.figure.Rectangle;
 /**
  * Gui level
  */
-public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
+public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, ISyncEvent {
 	private static final int PLAYER_COMMAND = 1;
 	// level base info
 	private final Level level;
@@ -371,7 +372,7 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 	 * @param point
 	 * @return
 	 */
-	private final GuiTile getObjectAtPoint(final Point2D point) {
+	private final GuiObjectTile getObjectAtPoint(final Point2D point) {
 		for (final GuiObjectTile objectTile: objectTiles) {
 			if (objectTile.getPoint().equals(point)) {
 				objectTile.setSelected(true);
@@ -395,6 +396,70 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent {
 				if (((ObjectTile) tile.getTile()).getGameCommand() == PLAYER_COMMAND) {
 					tile.setSelected(true);
 					selectedTiles.add(tile);
+				}
+			}
+		}
+	}
+
+	@Override
+	public final void sync() {
+		for (final GuiObjectTile observedTile: objectTiles) {
+			final Point2D point = observedTile.getPoint();
+			GuiObjectTile tile = null;
+			
+			if (point.getX() > 0) {
+				tile = getObjectAtPoint(new Point2D(point.getX() - 1, point.getY()));
+				if ((tile != null) && (tile.getGameCommand() != 0) && (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+			
+			if ((point.getX() > 0) && (point.getY() > 0)) {
+				tile = getObjectAtPoint(new Point2D(point.getX() - 1, point.getY() - 1));
+				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+
+			if ((point.getX() > 0) && (point.getY() < getLevel().getHeight() - 1)) {
+				tile = getObjectAtPoint(new Point2D(point.getX() - 1, point.getY() + 1));
+				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+
+			if (point.getY() < getLevel().getHeight() - 1) {
+				tile = getObjectAtPoint(new Point2D(point.getX(), point.getY() + 1));
+				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+			
+			if (point.getY() > 0) {
+				tile = getObjectAtPoint(new Point2D(point.getX(), point.getY() - 1));
+				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+
+			if (point.getX() < getLevel().getWidth() - 1) {
+				tile = getObjectAtPoint(new Point2D(point.getX() + 1, point.getY()));
+				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+			
+			if ((point.getX() < getLevel().getWidth() - 1) && (point.getY() > 0)) {
+				tile = getObjectAtPoint(new Point2D(point.getX() + 1, point.getY() - 1));
+				if ((tile != null) && (tile.getGameCommand() != 0) && (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
+				}
+			}
+
+			if ((point.getX() < getLevel().getWidth() - 1) && (point.getY() < getLevel().getHeight() - 1)) {
+				tile = getObjectAtPoint(new Point2D(point.getX() + 1, point.getY() + 1));
+				if ((tile != null) && (tile.getGameCommand() != 0) && (observedTile.getGameCommand() != tile.getGameCommand())) {
+					observedTile.playAnimation("attack");
 				}
 			}
 		}

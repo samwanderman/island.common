@@ -58,11 +58,12 @@ public class GuiUnitTile extends GuiObjectTile {
 
 	@Override
 	protected void setupAnimations(final List<String> names) {
+		final GuiUnitTile self = this;
+		
 		for (final String name: names) {
 			try {
 				final IAnimation animation = Resources.loadAnimation("/units/" + getTile().getId() + "/" + name + ".json");
 				if (name.equals("walk")) {
-					final GuiUnitTile self = this;
 					final ChangePositionAnimation changePositionAnimation = new ChangePositionAnimation(self, animation);
 					changePositionAnimation.setErrorCallback(new ChangePositionAnimationErrorCallback(changePositionAnimation));
 					addAnimation(name, changePositionAnimation);

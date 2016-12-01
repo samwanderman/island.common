@@ -120,4 +120,8 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 	public final void addAnimation(final String name, final IAnimation animation) {
 		animations.put(name, animation);
 	}
+	
+	public final int getGameCommand() {
+		return ((ObjectTile) getTile()).getGameCommand();
+	}
 }
