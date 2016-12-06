@@ -41,6 +41,7 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 			graphics.drawImage(image, getAbsoluteX() + (Const.TILE_WIDTH - image.getWidth()) / 2, getAbsoluteY() + (Const.TILE_HEIGHT - image.getHeight()) / 2);
 			graphics.setColor(Color.GREEN);
 			graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * ((float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth())), 2);
+			paintSelection(graphics);
 			return;
 		}
 
