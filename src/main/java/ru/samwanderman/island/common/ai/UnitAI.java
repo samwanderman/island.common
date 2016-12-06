@@ -51,7 +51,6 @@ public final class UnitAI implements IAI {
 		if (point.getX() > 0) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() - 1, point.getY()));
 			if ((tile != null) && (tile.getGameCommand() != 0) && (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -59,7 +58,6 @@ public final class UnitAI implements IAI {
 		if ((point.getX() > 0) && (point.getY() > 0)) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() - 1, point.getY() - 1));
 			if ((tile != null) && (tile.getGameCommand() != 0)&& (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -67,7 +65,6 @@ public final class UnitAI implements IAI {
 		if ((point.getX() > 0) && (point.getY() < level.getLevel().getHeight() - 1)) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() - 1, point.getY() + 1));
 			if ((tile != null) && (tile.getGameCommand() != 0)&& (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -75,7 +72,6 @@ public final class UnitAI implements IAI {
 		if (point.getY() < level.getLevel().getHeight() - 1) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX(), point.getY() + 1));
 			if ((tile != null) && (tile.getGameCommand() != 0)&& (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -83,7 +79,6 @@ public final class UnitAI implements IAI {
 		if (point.getY() > 0) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX(), point.getY() - 1));
 			if ((tile != null) && (tile.getGameCommand() != 0)&& (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -91,7 +86,6 @@ public final class UnitAI implements IAI {
 		if (point.getX() < level.getLevel().getWidth() - 1) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() + 1, point.getY()));
 			if ((tile != null) && (tile.getGameCommand() != 0)&& (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -99,7 +93,6 @@ public final class UnitAI implements IAI {
 		if ((point.getX() < level.getLevel().getWidth() - 1) && (point.getY() > 0)) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() + 1, point.getY() - 1));
 			if ((tile != null) && (tile.getGameCommand() != 0) && (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}
@@ -107,7 +100,6 @@ public final class UnitAI implements IAI {
 		if ((point.getX() < level.getLevel().getWidth() - 1) && (point.getY() < level.getLevel().getHeight() - 1)) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() + 1, point.getY() + 1));
 			if ((tile != null) && (tile.getGameCommand() != 0) && (unit.getGameCommand() != tile.getGameCommand())) {
-				unit.playAnimation("attack");
 				return true;
 			}
 		}		

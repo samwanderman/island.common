@@ -39,7 +39,6 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		if ((currentAnimation != null) && currentAnimation.isRunning()) {
 			final Image image = currentAnimation.getImage(); 
 			graphics.drawImage(image, getAbsoluteX() + (Const.TILE_WIDTH - image.getWidth()) / 2, getAbsoluteY() + (Const.TILE_HEIGHT - image.getHeight()) / 2);
-			paintSelection(graphics);
 			graphics.setColor(Color.GREEN);
 			graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * ((float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth())), 2);
 			return;
@@ -82,9 +81,10 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 				color = Color.RED;
 				break;
 			}
+			
 			graphics.setColor(color);
 			graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
-		}		
+		}	
 	}
 	
 	protected void setupAnimations(final List<String> names) {

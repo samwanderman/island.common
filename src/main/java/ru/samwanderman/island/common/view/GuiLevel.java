@@ -202,6 +202,7 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 				final GuiTile _tile = getObjectAtPoint(point);
 				if (_tile != null) {
 					if (((ObjectTile) _tile.getTile()).getGameCommand() == PLAYER_COMMAND) {
+						_tile.setSelected(true);
 						selectedTiles.add(_tile);
 					}
 				}
@@ -375,7 +376,6 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 	public final GuiObjectTile getObjectAtPoint(final Point2D point) {
 		for (final GuiObjectTile objectTile: objectTiles) {
 			if (objectTile.getPoint().equals(point)) {
-				objectTile.setSelected(true);
 				return objectTile;
 			}
 		}
