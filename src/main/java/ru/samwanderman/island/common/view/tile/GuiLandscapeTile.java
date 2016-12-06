@@ -4,12 +4,13 @@
 package ru.samwanderman.island.common.view.tile;
 
 import ru.samwanderman.island.common.core.object.LandscapeTile;
+import ru.samwanderman.island.common.view.GuiLevel;
 
 /**
  * LandscapeTile
  */
 public class GuiLandscapeTile extends GuiTile {
-	public GuiLandscapeTile(final LandscapeTile tile) {
-		super(tile);
+	public GuiLandscapeTile(final GuiLevel guiLevel, final LandscapeTile tile) {
+		super(guiLevel, tile);
 	}
 }

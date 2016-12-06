@@ -9,6 +9,8 @@ import java.util.List;
 
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.ObjectTile;
+import ru.samwanderman.island.common.view.GuiLevel;
+import ru.samwanderman.wheel.ai.IAI;
 import ru.samwanderman.wheel.animation.IAnimatedObject;
 import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.event.event.ISyncEvent;
@@ -23,11 +25,12 @@ import ru.samwanderman.wheel.view.Image;
  */
 public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObject {
 	final private HashMap<String, IAnimation> animations = new HashMap<>();
+	private IAI ai;
 	private IAnimation currentAnimation = null;
 	
-	public GuiObjectTile(final ObjectTile tile) 
+	public GuiObjectTile(final GuiLevel guiLevel, final ObjectTile tile) 
 			throws IOException {
-		super(tile);
+		super(guiLevel, tile);
 		setupAnimations(tile.getAnimations());
 	}
 	
@@ -59,6 +62,10 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 	public void sync() {
 		if (currentAnimation != null) {
 			currentAnimation.sync();
+		}
+		
+		if (ai != null) {
+			ai.sync();
 		}
 	}
 	
@@ -123,5 +130,9 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 	
 	public final int getGameCommand() {
 		return ((ObjectTile) getTile()).getGameCommand();
+	}
+	
+	protected final void setAI (final IAI ai) {
+		this.ai = ai;
 	}
 }

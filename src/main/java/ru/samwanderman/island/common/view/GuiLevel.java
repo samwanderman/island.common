@@ -297,7 +297,7 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 	protected final void update() {
 		landscapeTiles.clear();
 		for (final LandscapeTile landscapeTile: level.getLandscapeTiles()) {
-			final GuiLandscapeTile tile = new GuiLandscapeTile(landscapeTile);
+			final GuiLandscapeTile tile = new GuiLandscapeTile(this, landscapeTile);
 			tile.setParent(this);
 			landscapeTiles.add(tile);
 		}
@@ -306,7 +306,7 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 		objectTiles.clear();
 		for (final ObjectTile objectTile: level.getObjectTiles()) {
 			try {
-				final GuiObjectTile tile = new GuiObjectTile(objectTile);
+				final GuiObjectTile tile = new GuiObjectTile(this, objectTile);
 				tile.setParent(this);
 				objectTiles.add(tile);
 			} catch (final IOException e) {
@@ -317,7 +317,7 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 		
 		for (final UnitTile unitTile: level.getUnitTiles()) {
 			try {
-				final GuiUnitTile tile = new GuiUnitTile(unitTile);
+				final GuiUnitTile tile = new GuiUnitTile(this, unitTile);
 				tile.setParent(this);
 				objectTiles.add(tile);
 			} catch (final IOException e) {
@@ -372,7 +372,7 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 	 * @param point
 	 * @return
 	 */
-	private final GuiObjectTile getObjectAtPoint(final Point2D point) {
+	public final GuiObjectTile getObjectAtPoint(final Point2D point) {
 		for (final GuiObjectTile objectTile: objectTiles) {
 			if (objectTile.getPoint().equals(point)) {
 				objectTile.setSelected(true);
@@ -403,65 +403,8 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 
 	@Override
 	public final void sync() {
-		for (final GuiObjectTile observedTile: objectTiles) {
-			final Point2D point = observedTile.getPoint();
-			GuiObjectTile tile = null;
-			
-			if (point.getX() > 0) {
-				tile = getObjectAtPoint(new Point2D(point.getX() - 1, point.getY()));
-				if ((tile != null) && (tile.getGameCommand() != 0) && (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-			
-			if ((point.getX() > 0) && (point.getY() > 0)) {
-				tile = getObjectAtPoint(new Point2D(point.getX() - 1, point.getY() - 1));
-				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-
-			if ((point.getX() > 0) && (point.getY() < getLevel().getHeight() - 1)) {
-				tile = getObjectAtPoint(new Point2D(point.getX() - 1, point.getY() + 1));
-				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-
-			if (point.getY() < getLevel().getHeight() - 1) {
-				tile = getObjectAtPoint(new Point2D(point.getX(), point.getY() + 1));
-				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-			
-			if (point.getY() > 0) {
-				tile = getObjectAtPoint(new Point2D(point.getX(), point.getY() - 1));
-				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-
-			if (point.getX() < getLevel().getWidth() - 1) {
-				tile = getObjectAtPoint(new Point2D(point.getX() + 1, point.getY()));
-				if ((tile != null) && (tile.getGameCommand() != 0)&& (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-			
-			if ((point.getX() < getLevel().getWidth() - 1) && (point.getY() > 0)) {
-				tile = getObjectAtPoint(new Point2D(point.getX() + 1, point.getY() - 1));
-				if ((tile != null) && (tile.getGameCommand() != 0) && (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
-
-			if ((point.getX() < getLevel().getWidth() - 1) && (point.getY() < getLevel().getHeight() - 1)) {
-				tile = getObjectAtPoint(new Point2D(point.getX() + 1, point.getY() + 1));
-				if ((tile != null) && (tile.getGameCommand() != 0) && (observedTile.getGameCommand() != tile.getGameCommand())) {
-					observedTile.playAnimation("attack");
-				}
-			}
+		for (final GuiObjectTile tiles: objectTiles) {
+			tiles.sync();
 		}
 	}
 }

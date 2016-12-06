@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.samwanderman.island.common.ai.UnitAI;
 import ru.samwanderman.island.common.animation.ChangePositionAnimation;
 import ru.samwanderman.island.common.core.object.UnitTile;
 import ru.samwanderman.island.common.view.GuiLevel;
@@ -22,9 +23,10 @@ import ru.samwanderman.wheel.view.figure.Point2D;
  * Gui Unit tile
  */
 public class GuiUnitTile extends GuiObjectTile {
-	public GuiUnitTile(final UnitTile tile) 
+	public GuiUnitTile(final GuiLevel guiLevel, final UnitTile tile) 
 			throws IOException {
-		super(tile);
+		super(guiLevel, tile);
+		setAI(new UnitAI(this));
 	}
 	
 	/**
@@ -90,5 +92,5 @@ public class GuiUnitTile extends GuiObjectTile {
 			final LinkedList<Point2D> newPath = Logic.getFindPathAlgorithm().find(map, getPoint(), newEndPoint);
 			animation.setPath(newPath, (newPath.size() - 1) * Config.GLOBAL_TIMER_STEP * 100);
 		}
-	};
+	}
 }
