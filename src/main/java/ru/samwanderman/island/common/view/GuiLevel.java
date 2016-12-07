@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.samwanderman.island.common.animation.ChangePositionAnimation;
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.LandscapeTile;
 import ru.samwanderman.island.common.core.object.Level;
@@ -19,6 +20,7 @@ import ru.samwanderman.island.common.view.tile.GuiTile;
 import ru.samwanderman.island.common.view.tile.GuiUnitTile;
 import ru.samwanderman.island.common.view.tile.TileComparator;
 import ru.samwanderman.wheel.ai.Logic;
+import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.core.Config;
 import ru.samwanderman.wheel.event.Events;
 import ru.samwanderman.wheel.event.event.GuiEvent;
@@ -117,7 +119,9 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 		
 		for (final GuiTile tile: objectTiles) {
 			if (tile instanceof GuiUnitTile) {
-				map[tile.getPoint().getX()][tile.getPoint().getY()] = ((GuiUnitTile) tile).isChangePositionAnimationRunning() ? Config.CELL_BUSY : Config.CELL_TEMPORARILY_UNAVAILABLE;				
+				final IAnimation anim = ((GuiUnitTile) tile).getCurrentAnimation();
+				final boolean isRunning = ((anim != null) && (anim.getName() == ChangePositionAnimation.NAME) && anim.isRunning());
+				map[tile.getPoint().getX()][tile.getPoint().getY()] = isRunning ? Config.CELL_BUSY : Config.CELL_TEMPORARILY_UNAVAILABLE;				
 			}
 			map[tile.getPoint().getX()][tile.getPoint().getY()] = Config.CELL_UNAVAILABLE;
 		}
@@ -143,7 +147,9 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 		for (final GuiTile tile: objectTiles) {
 			if (tile.getPoint().equals(point)) {
 				if (tile instanceof GuiUnitTile) {
-					return ((GuiUnitTile) tile).isChangePositionAnimationRunning() ? Config.CELL_BUSY : Config.CELL_TEMPORARILY_UNAVAILABLE;				
+					final IAnimation anim = ((GuiUnitTile) tile).getCurrentAnimation();
+					final boolean isRunning = ((anim != null) && (anim.getName() == ChangePositionAnimation.NAME) && anim.isRunning());
+					return isRunning ? Config.CELL_BUSY : Config.CELL_TEMPORARILY_UNAVAILABLE;				
 				}
 				return Config.CELL_UNAVAILABLE;
 			}

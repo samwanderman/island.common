@@ -44,20 +44,6 @@ public class GuiUnitTile extends GuiObjectTile {
 		playAnimation("walk");
 	}
 	
-	/**
-	 * Check if change pos animation running
-	 * 
-	 * @return
-	 */
-	public final boolean isChangePositionAnimationRunning() {
-		final IAnimation animation = getCurrentAnimation();
-		if ((animation == null) || !(animation instanceof ChangePositionAnimation)) {
-			return false;
-		}
-		
-		return animation.isRunning();
-	}
-
 	@Override
 	protected void setupAnimations(final List<String> names) {
 		final GuiUnitTile self = this;

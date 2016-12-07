@@ -1,9 +1,11 @@
 package ru.samwanderman.island.common.ai;
 
+import ru.samwanderman.island.common.animation.ChangePositionAnimation;
 import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.island.common.view.tile.GuiObjectTile;
 import ru.samwanderman.island.common.view.tile.GuiUnitTile;
 import ru.samwanderman.wheel.ai.IAI;
+import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.view.figure.Point2D;
 
 public final class UnitAI implements IAI {
@@ -15,27 +17,20 @@ public final class UnitAI implements IAI {
 	
 	@Override
 	public final void sync() {
-		final boolean isMove = checkMove();
+		final IAnimation anim = unit.getCurrentAnimation();
+		final boolean isMoving = ((anim != null) && (anim.getName().equals(ChangePositionAnimation.NAME)) && anim.isRunning());
+		final boolean isAttacking = ((anim != null) && (anim.getName().equals("attack")) && anim.isRunning());
 		final boolean canAttack = checkAttack();
 		
-		if (canAttack && !isMove) {
-			unit.stopCurrentAnimation();
+		if (canAttack && !isMoving && !isAttacking) {
 			unit.playAnimation("attack");
+		} else if (isMoving) {
 			return;
-		} else if (isMove) {
+		} else if (isAttacking && canAttack) {
 			return;
 		} else {
 			unit.stopCurrentAnimation();
 		}
-	}
-	
-	/**
-	 * Check if unit is moving
-	 * 
-	 * @return
-	 */
-	private final boolean checkMove() {
-		return unit.isChangePositionAnimationRunning();
 	}
 	
 	/**

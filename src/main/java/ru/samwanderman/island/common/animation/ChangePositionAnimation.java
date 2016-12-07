@@ -20,6 +20,8 @@ import ru.samwanderman.wheel.view.figure.Point2D;
  * Change position animation 
  */
 public final class ChangePositionAnimation implements IAnimation {
+	public final static String NAME = "move";
+	
 	private boolean running = false;
 	private final GuiTile target;
 	private final IAnimation animation;
@@ -149,5 +151,10 @@ public final class ChangePositionAnimation implements IAnimation {
 	@Override
 	public final Image getImage() {
 		return animation.getImage();
+	}
+	
+	@Override
+	public final String getName() {
+		return NAME;
 	}
 }
