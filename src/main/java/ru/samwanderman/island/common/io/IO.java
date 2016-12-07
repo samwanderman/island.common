@@ -150,6 +150,9 @@ public class IO {
 				if (node.get("maxHealth") != null) {
 					tile.setHealth(node.get("maxHealth").asInt());
 				}
+				if (node.get("attack") != null) {
+					tile.setHealth(node.get("attack").asInt());
+				}
 				unitTiles.add(tile);
 			}
 		}

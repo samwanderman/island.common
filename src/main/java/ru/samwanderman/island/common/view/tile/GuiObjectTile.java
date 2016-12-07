@@ -39,23 +39,13 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		if ((currentAnimation != null) && currentAnimation.isRunning()) {
 			final Image image = currentAnimation.getImage(); 
 			graphics.drawImage(image, getAbsoluteX() + (Const.TILE_WIDTH - image.getWidth()) / 2, getAbsoluteY() + (Const.TILE_HEIGHT - image.getHeight()) / 2);
-			graphics.setColor(Color.GREEN);
-			graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * ((float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth())), 2);
+			paintHealth(graphics);
 			paintSelection(graphics);
 			return;
 		}
 
 		super.paint(graphics);
-		
-		final float perc = (float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth();
-		if (perc <= 0.33) {
-			graphics.setColor(Color.RED);	
-		} else if (perc <= 0.66) {
-			graphics.setColor(Color.YELLOW);
-		} else {
-			graphics.setColor(Color.GREEN);	
-		}
-		graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * perc), 2);
+		paintHealth(graphics);
 	}
 
 	@Override
@@ -86,6 +76,23 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 			graphics.setColor(color);
 			graphics.drawRect(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
 		}	
+	}
+	
+	private final void paintHealth(final Graphics graphics) {
+		// avoid neutral objects
+		if (getGameCommand() == 0) {
+			return;
+		}
+		
+		final float perc = (float) ((ObjectTile) getTile()).getHealth() / ((ObjectTile) getTile()).getMaxHealth();
+		if (perc <= 0.33) {
+			graphics.setColor(Color.RED);	
+		} else if (perc <= 0.66) {
+			graphics.setColor(Color.YELLOW);
+		} else {
+			graphics.setColor(Color.GREEN);	
+		}
+		graphics.drawRect(getAbsoluteX(), getAbsoluteY() - 10, (int) (Const.TILE_WIDTH * perc), 2);		
 	}
 	
 	protected void setupAnimations(final List<String> names) {
@@ -135,5 +142,16 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 	
 	protected final void setAI (final IAI ai) {
 		this.ai = ai;
+	}
+	
+	public final void addHealth(final int value) {
+		final ObjectTile tile = (ObjectTile) getTile(); 
+		int resultHealth = tile.getHealth() + value;
+		if (resultHealth > tile.getMaxHealth()) {
+			resultHealth = tile.getMaxHealth();
+		} else if (resultHealth < 0) {
+			resultHealth = 0;
+		}
+		tile.setHealth(resultHealth);
 	}
 }
