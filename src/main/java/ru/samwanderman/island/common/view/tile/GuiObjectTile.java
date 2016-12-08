@@ -14,6 +14,7 @@ import ru.samwanderman.wheel.ai.IAI;
 import ru.samwanderman.wheel.animation.IAnimatedObject;
 import ru.samwanderman.wheel.animation.IAnimation;
 import ru.samwanderman.wheel.event.event.ISyncEvent;
+import ru.samwanderman.wheel.event.listener.ObjectListener;
 import ru.samwanderman.wheel.io.Resources;
 import ru.samwanderman.wheel.log.Log;
 import ru.samwanderman.wheel.view.Color;
@@ -114,6 +115,16 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 			currentAnimation.play();
 		}
 	}
+	
+	@Override
+	public final void playAnimation(final String name, final ObjectListener<Object> callback) {
+		stopCurrentAnimation();
+		
+		currentAnimation = animations.get(name);
+		if (currentAnimation != null) {
+			currentAnimation.play(callback);
+		}
+	}
 
 	@Override
 	public final void stopCurrentAnimation() {
@@ -153,5 +164,18 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 			resultHealth = 0;
 		}
 		tile.setHealth(resultHealth);
+		
+		if (resultHealth == 0) {
+			playAnimation("dead", new ObjectListener<Object>() {
+				@Override
+				public final void on(final Object object) {
+					remove();
+				}
+			});
+		}
+	}
+	
+	public final int getHealth() {
+		return ((ObjectTile) getTile()).getHealth();
 	}
 }

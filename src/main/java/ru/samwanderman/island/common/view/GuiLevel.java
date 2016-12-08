@@ -31,6 +31,7 @@ import ru.samwanderman.wheel.event.event.KeyEvent;
 import ru.samwanderman.wheel.event.event.MouseEvent;
 import ru.samwanderman.wheel.log.Log;
 import ru.samwanderman.wheel.view.Color;
+import ru.samwanderman.wheel.view.DisplayContainer;
 import ru.samwanderman.wheel.view.DisplayObject;
 import ru.samwanderman.wheel.view.Graphics;
 import ru.samwanderman.wheel.view.figure.Point2D;
@@ -39,7 +40,7 @@ import ru.samwanderman.wheel.view.figure.Rectangle;
 /**
  * Gui level
  */
-public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, ISyncEvent {
+public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent, ISyncEvent {
 	private static final int PLAYER_COMMAND = 1;
 	// level base info
 	private final Level level;
@@ -176,6 +177,15 @@ public class GuiLevel extends DisplayObject implements IMouseEvent, IKeyEvent, I
 	@Override
 	public final int getHeight() {
 		return level.getHeight() * Const.TILE_HEIGHT;
+	}
+	
+	@Override
+	public final boolean removeChild(final DisplayObject object) {
+		if (object instanceof GuiObjectTile) {
+			return objectTiles.remove(object);
+		}
+		
+		return false;
 	}
 
 	@Override

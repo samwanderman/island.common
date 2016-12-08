@@ -157,4 +157,10 @@ public final class ChangePositionAnimation implements IAnimation {
 	public final String getName() {
 		return NAME;
 	}
+	
+	@Override
+	public final void play(final ObjectListener<Object> callback) {
+		successCallback = callback;
+		play();
+	}
 }

@@ -22,7 +22,7 @@ public final class UnitAI implements IAI {
 		final boolean isMoving = ((anim != null) && (anim.getName().equals(ChangePositionAnimation.NAME)) && anim.isRunning());
 		final boolean isAttacking = ((anim != null) && (anim.getName().equals("attack")) && anim.isRunning());
 		final GuiObjectTile tile = checkAttack(); 
-		final boolean canAttack = tile != null;
+		final boolean canAttack = (tile != null) && (unit.getHealth() > 0);
 		
 		if (canAttack && !isMoving && !isAttacking) {
 			unit.playAnimation("attack");
