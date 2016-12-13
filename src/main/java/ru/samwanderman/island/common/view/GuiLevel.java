@@ -48,7 +48,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 	
 	// tiles
 	private final List<GuiLandscapeTile> landscapeTiles = new ArrayList<>();
-	private final List<GuiObjectTile<?>> objectTiles = new ArrayList<>();
+	private final List<GuiObjectTile<?, ?>> objectTiles = new ArrayList<>();
 	
 	// edit mode
 	private boolean editMode = false;
@@ -82,7 +82,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 			Events.dispatch(event);
 		}
 		
-		for (final GuiObjectTile<?> tile: objectTiles) {
+		for (final GuiObjectTile<?, ?> tile: objectTiles) {
 			final GuiEvent event = new GuiEvent(tile, graphics);
 			Events.dispatch(event);
 		}
@@ -324,7 +324,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 		objectTiles.clear();
 		for (final ObjectTile objectTile: level.getObjectTiles()) {
 			try {
-				final GuiObjectTile<?> tile = new GuiObjectTile<>(this, objectTile);
+				final GuiObjectTile<?, ?> tile = new GuiObjectTile<>(this, objectTile);
 				tile.setParent(this);
 				objectTiles.add(tile);
 			} catch (final IOException e) {
@@ -343,7 +343,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 				Log.error("Can't load unit tile " + unitTile.getName());
 			}
 		}
-		Collections.sort(objectTiles, new TileComparator<GuiObjectTile<?>>());
+		Collections.sort(objectTiles, new TileComparator<GuiObjectTile<?, ?>>());
 
 		super.update();
 	}
@@ -365,7 +365,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 	private final GuiTile<GuiLevel, ?> unbindTileAtPoint(final Point2D point) {
 		GuiTile<GuiLevel, ?> tile = null;
 		
-		for (final GuiObjectTile<?> objectTile: objectTiles) {
+		for (final GuiObjectTile<?, ?> objectTile: objectTiles) {
 			if (objectTile.getPoint().equals(point)) {
 				objectTile.setSelected(true);
 				objectTiles.remove(objectTile);
@@ -390,8 +390,8 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 	 * @param point
 	 * @return
 	 */
-	public final GuiObjectTile<? extends IAI> getObjectAtPoint(final Point2D point) {
-		for (final GuiObjectTile<? extends IAI> objectTile: objectTiles) {
+	public final GuiObjectTile<? extends IAI, ?> getObjectAtPoint(final Point2D point) {
+		for (final GuiObjectTile<? extends IAI, ?> objectTile: objectTiles) {
 			if (objectTile.getPoint().equals(point)) {
 				return objectTile;
 			}
@@ -408,7 +408,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 	}
 	
 	private final void setSelectedTilesBySelection() {
-		for (final GuiObjectTile<?> tile: objectTiles) {
+		for (final GuiObjectTile<?, ?> tile: objectTiles) {
 			if ((tile instanceof GuiUnitTile) && selection.contains(tile.getBoundRect())) {
 				if (((ObjectTile) tile.getTile()).getGameCommand() == PLAYER_COMMAND) {
 					tile.setSelected(true);
@@ -420,7 +420,7 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 
 	@Override
 	public final void sync() {
-		for (final GuiObjectTile<?> tiles: objectTiles) {
+		for (final GuiObjectTile<?, ?> tiles: objectTiles) {
 			tiles.sync();
 		}
 	}

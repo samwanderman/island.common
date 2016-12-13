@@ -24,12 +24,12 @@ import ru.samwanderman.wheel.view.Image;
 /**
  * Gui object tile
  */
-public class GuiObjectTile<T extends IAI> extends GuiTile<GuiLevel, ObjectTile> implements ISyncEvent, IAnimatedObject {
+public class GuiObjectTile<T1 extends IAI, T2 extends ObjectTile> extends GuiTile<GuiLevel, T2> implements ISyncEvent, IAnimatedObject {
 	final private HashMap<String, IAnimation> animations = new HashMap<>();
-	private T ai;
+	private T1 ai;
 	private IAnimation currentAnimation = null;
 	
-	public GuiObjectTile(final GuiLevel guiLevel, final ObjectTile tile) 
+	public GuiObjectTile(final GuiLevel guiLevel, final T2 tile) 
 			throws IOException {
 		super(guiLevel, tile);
 		setupAnimations(tile.getAnimations());
@@ -150,7 +150,7 @@ public class GuiObjectTile<T extends IAI> extends GuiTile<GuiLevel, ObjectTile> 
 		return ((ObjectTile) getTile()).getGameCommand();
 	}
 	
-	protected final void setAI (final T ai) {
+	protected final void setAI (final T1 ai) {
 		this.ai = ai;
 	}
 	

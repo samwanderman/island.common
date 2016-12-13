@@ -22,7 +22,7 @@ import ru.samwanderman.wheel.view.figure.Point2D;
 /**
  * Gui Unit tile
  */
-public class GuiUnitTile extends GuiObjectTile<UnitAI> {
+public class GuiUnitTile extends GuiObjectTile<UnitAI, UnitTile> {
 	public GuiUnitTile(final GuiLevel guiLevel, final UnitTile tile) 
 			throws IOException {
 		super(guiLevel, tile);
