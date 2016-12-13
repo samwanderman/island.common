@@ -21,7 +21,7 @@ public final class UnitAI implements IAI {
 		final IAnimation anim = unit.getCurrentAnimation();
 		final boolean isMoving = ((anim != null) && (anim.getName().equals(ChangePositionAnimation.NAME)) && anim.isRunning());
 		final boolean isAttacking = ((anim != null) && (anim.getName().equals("attack")) && anim.isRunning());
-		final GuiObjectTile tile = checkAttack(); 
+		final GuiObjectTile<?> tile = checkAttack(); 
 		final boolean canAttack = (tile != null) && (unit.getHealth() > 0);
 		
 		if (canAttack && !isMoving && !isAttacking) {
@@ -42,10 +42,10 @@ public final class UnitAI implements IAI {
 	 * 
 	 * @return
 	 */
-	private final GuiObjectTile checkAttack() {
+	private final GuiObjectTile<?> checkAttack() {
 		final Point2D point = unit.getPoint();
 		final GuiLevel level = unit.getGuiLevel();
-		GuiObjectTile tile = null;
+		GuiObjectTile<?> tile = null;
 		
 		if (point.getX() > 0) {
 			tile = level.getObjectAtPoint(new Point2D(point.getX() - 1, point.getY()));

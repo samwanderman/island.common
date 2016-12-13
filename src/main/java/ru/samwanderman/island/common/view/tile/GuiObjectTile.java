@@ -24,9 +24,9 @@ import ru.samwanderman.wheel.view.Image;
 /**
  * Gui object tile
  */
-public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObject {
+public class GuiObjectTile<T extends IAI> extends GuiTile<GuiLevel, ObjectTile> implements ISyncEvent, IAnimatedObject {
 	final private HashMap<String, IAnimation> animations = new HashMap<>();
-	private IAI ai;
+	private T ai;
 	private IAnimation currentAnimation = null;
 	
 	public GuiObjectTile(final GuiLevel guiLevel, final ObjectTile tile) 
@@ -63,9 +63,8 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 	@Override
 	protected final void paintSelection(final Graphics graphics) {
 		if (isSelected()) {
-			final ObjectTile tile = (ObjectTile) getTile();
 			Color color = Color.GRAY;
-			switch (tile.getGameCommand()) {
+			switch (getTile().getGameCommand()) {
 			case 1:
 				color = Color.GREEN;
 				break;
@@ -151,7 +150,7 @@ public class GuiObjectTile extends GuiTile implements ISyncEvent, IAnimatedObjec
 		return ((ObjectTile) getTile()).getGameCommand();
 	}
 	
-	protected final void setAI (final IAI ai) {
+	protected final void setAI (final T ai) {
 		this.ai = ai;
 	}
 	

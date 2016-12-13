@@ -93,11 +93,11 @@ public class GameBoard extends DisplayContainer implements IMouseEvent, IKeyEven
 		return guiLevel.getHeight();
 	}
 	
-	public final <T extends GuiTile> void setIntentTile(final T tile) {
+	public final <T extends GuiTile<GuiLevel, ?>> void setIntentTile(final T tile) {
 		guiLevel.setIntentTile(tile);
 	}
 	
-	public final <T extends GuiTile> void addTile(final T tile, final Point2D point)
+	public final <T extends GuiTile<GuiLevel, ?>> void addTile(final T tile, final Point2D point)
 			throws IOException {
 		tile.setPoint(point);
 		guiLevel.addTile(tile);

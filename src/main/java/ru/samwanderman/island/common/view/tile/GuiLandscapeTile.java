@@ -9,7 +9,7 @@ import ru.samwanderman.island.common.view.GuiLevel;
 /**
  * LandscapeTile
  */
-public class GuiLandscapeTile extends GuiTile {
+public class GuiLandscapeTile extends GuiTile<GuiLevel, LandscapeTile> {
 	public GuiLandscapeTile(final GuiLevel guiLevel, final LandscapeTile tile) {
 		super(guiLevel, tile);
 	}

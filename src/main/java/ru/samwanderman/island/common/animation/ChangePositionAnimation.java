@@ -23,7 +23,7 @@ public final class ChangePositionAnimation implements IAnimation {
 	public final static String NAME = "move";
 	
 	private boolean running = false;
-	private final GuiTile target;
+	private final GuiTile<GuiLevel, ?> target;
 	private final IAnimation animation;
 	private ObjectListener<Object> successCallback;
 	private ObjectListener<Object> errorCallback;
@@ -32,7 +32,7 @@ public final class ChangePositionAnimation implements IAnimation {
 	private Point2D prevPoint, nextPoint;
 	private int step;
 	
-	public ChangePositionAnimation(final GuiTile target, final IAnimation animation) {
+	public ChangePositionAnimation(final GuiTile<GuiLevel, ?> target, final IAnimation animation) {
 		this.target = target;
 		this.animation = animation;
 	}

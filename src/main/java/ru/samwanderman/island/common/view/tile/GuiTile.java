@@ -5,19 +5,19 @@ package ru.samwanderman.island.common.view.tile;
 
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.Tile;
-import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.wheel.view.Color;
+import ru.samwanderman.wheel.view.DisplayObject;
 import ru.samwanderman.wheel.view.Graphics;
 import ru.samwanderman.wheel.view.Image;
 import ru.samwanderman.wheel.view.figure.Point2D;
 import ru.samwanderman.wheel.view.ui.GuiImage;
 
-public class GuiTile extends GuiImage {
-	private final GuiLevel guiLevel;
-	private final Tile tile;
+public class GuiTile<T1 extends DisplayObject, T2 extends Tile> extends GuiImage {
+	private final T1 guiLevel;
+	private final T2 tile;
 	private boolean selected = false;
 	
-	public GuiTile(final GuiLevel guiLevel, final Tile tile) {
+	public GuiTile(final T1 guiLevel, final T2 tile) {
 		super(tile.getImage());
 		this.guiLevel = guiLevel;
 		this.tile = tile;
@@ -45,7 +45,7 @@ public class GuiTile extends GuiImage {
 		}		
 	}
 	
-	public final Tile getTile() {
+	public final T2 getTile() {
 		return tile;
 	}
 
@@ -65,7 +65,7 @@ public class GuiTile extends GuiImage {
 		return selected;
 	}
 	
-	public final GuiLevel getGuiLevel() {
+	public final T1 getGuiLevel() {
 		return guiLevel;
 	}
 }

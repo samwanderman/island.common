@@ -5,12 +5,13 @@ package ru.samwanderman.island.common.view.tile;
 
 import java.util.Comparator;
 
+import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.wheel.view.figure.Point2D;
 
 /**
  * GuiTile comparator
  */
-public final class TileComparator<T extends GuiTile> implements Comparator<T> {
+public final class TileComparator<T extends GuiTile<GuiLevel, ?>> implements Comparator<T> {
 	public final int compare(final T o1, final T o2) {
 		final Point2D p1 = o1.getPoint(), p2 = o2.getPoint();
 
