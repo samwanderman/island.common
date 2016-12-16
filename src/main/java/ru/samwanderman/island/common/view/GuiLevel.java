@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.samwanderman.island.common.ai.LevelAI;
 import ru.samwanderman.island.common.animation.ChangePositionAnimation;
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.LandscapeTile;
@@ -59,16 +60,20 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 	
 	private Rectangle selection;
 	
+	private final LevelAI levelAI;
+	
 	public GuiLevel(final Level level) {
 		this.level = level;
+		levelAI = new LevelAI(this);
 		showCoords = false;
 		update();
 	}
 	
 	public GuiLevel(final Level level, final boolean editMode) {
 		this.level = level;
-		showCoords = false;
 		this.editMode = editMode;
+		levelAI = new LevelAI(this);
+		showCoords = false;
 		update();
 	}
 
@@ -184,6 +189,8 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 	public final boolean removeChild(final DisplayObject object) {
 		if (object instanceof GuiObjectTile) {
 			return objectTiles.remove(object);
+		} else if (object instanceof GuiLandscapeTile) {
+			return landscapeTiles.remove(object);
 		}
 		
 		return false;
@@ -420,6 +427,8 @@ public class GuiLevel extends DisplayContainer implements IMouseEvent, IKeyEvent
 
 	@Override
 	public final void sync() {
+		levelAI.sync();
+		
 		for (final GuiObjectTile<?, ?> tiles: objectTiles) {
 			tiles.sync();
 		}

@@ -9,15 +9,18 @@ import java.util.List;
 
 import ru.samwanderman.island.common.core.Const;
 import ru.samwanderman.island.common.core.object.ObjectTile;
+import ru.samwanderman.island.common.event.RemoveTileEvent;
 import ru.samwanderman.island.common.view.GuiLevel;
 import ru.samwanderman.wheel.ai.IAI;
 import ru.samwanderman.wheel.animation.IAnimatedObject;
 import ru.samwanderman.wheel.animation.IAnimation;
+import ru.samwanderman.wheel.event.Events;
 import ru.samwanderman.wheel.event.event.ISyncEvent;
 import ru.samwanderman.wheel.event.listener.ObjectListener;
 import ru.samwanderman.wheel.io.Resources;
 import ru.samwanderman.wheel.log.Log;
 import ru.samwanderman.wheel.view.Color;
+import ru.samwanderman.wheel.view.DisplayObject;
 import ru.samwanderman.wheel.view.Graphics;
 import ru.samwanderman.wheel.view.Image;
 
@@ -25,6 +28,7 @@ import ru.samwanderman.wheel.view.Image;
  * Gui object tile
  */
 public class GuiObjectTile<T1 extends IAI, T2 extends ObjectTile> extends GuiTile<GuiLevel, T2> implements ISyncEvent, IAnimatedObject {
+	private final GuiObjectTile<T1, T2> self = this;
 	final private HashMap<String, IAnimation> animations = new HashMap<>();
 	private T1 ai;
 	private IAnimation currentAnimation = null;
@@ -168,7 +172,7 @@ public class GuiObjectTile<T1 extends IAI, T2 extends ObjectTile> extends GuiTil
 			playAnimation("dead", new ObjectListener<Object>() {
 				@Override
 				public final void on(final Object object) {
-					remove();
+					Events.dispatch(new RemoveTileEvent((DisplayObject) getParent(), self));
 				}
 			});
 		}
